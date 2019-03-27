@@ -23,6 +23,8 @@ services:
     image: tp33/django
     ports:
       - 8000:8000
+    links:
+      - db:database
     volumes:
       - ./web/:/app
     command: bash -c " pip install --upgrade -r requirements.txt
