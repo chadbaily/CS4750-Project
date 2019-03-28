@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block title %}Actors{% endblock %} {% block content%}
+
+<h1>Actors:</h1>
+
+<p>
+  Here below you can find some of our actors!
+</p>
+
+<div class="row">
+  {% for actor in actors %}
+  <div class="card col-md-4 card-space">
+    <div class="card-body">
+      <h5 class="card-title">{{ actor.name }}</h5>
+      <!-- <p class="card-text">Birthdate: {{ actor.birthdate }}</p> -->
+      <p class="card-text">Gender: {{ actor.gender }}</p>
+      <!-- <a href="food/{{ food.pk }}/" class="btn btn-primary">Learn More</a> -->
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

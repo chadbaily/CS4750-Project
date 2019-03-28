@@ -14,21 +14,28 @@ def home(request):
     return render(request, 'home.block.html')
 
 
-def test(request):
+def actors(request):
     # Open database connection
     db = pymysql.connect("database", "root", "example", "project")
 
-    # prepare a cursor object using cursor() method
+    # Prepare to interact with the DB
     cursor = db.cursor()
 
-    # execute SQL query using execute() method.
-    cursor.execute("SELECT VERSION()")
+    # Get all the actors
+    cursor.execute("SELECT * FROM Actor")
 
-    # Fetch a single row using fetchone() method.
-    data = cursor.fetchone()
-    print("Database version : %s " % data)
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    actors = []
+    for row in data:
+        actor = {
+            "name": str(row[1]) + " " + str(row[3]),
+            "gender": row[5]
+        }
+        actors.append(actor)
 
     # disconnect from server
     db.close()
 
-    return HttpResponse("Database version : %s " % data)
+    return render(request, 'actors.block.html', {"actors": actors})
