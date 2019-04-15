@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block title %}Edit Actor{% endblock %} {% block content%}
+
+<h1>Create Actor</h1>
+
+<div class="col-md-6">
+  <form form action="submit/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="first_name">Actor First Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="first_name"
+        aria-describedby="first_nameHelp"
+        placeholder="John",
+        name="first_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="middle_name">Actor Middle Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="middle_name"
+        aria-describedby="middle_nameHelp"
+        placeholder="Mark"
+        name="middle_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="last_name">Actor Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="last_name"
+        aria-describedby="last_nameHelp"
+        placeholder="Doe"
+        name="last_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <input type="text" class="form-control" id="gender" name="gender" />
+    </div>
+    <div class="form-group">
+      <label for="dob">Birthday</label>
+      <input type="text" class="form-control" id="dob" name="dob" placeholder="1969-02-27"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

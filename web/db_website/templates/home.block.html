@@ -1,5 +1,17 @@
-{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content%}
 
 <h1>Welcome!!!</h1>
+<div class="row my-3">
+  <div class="col-md-4">
+    <a href="/actors/create">
+      <div class="card">
+        <div class="card-block text-center">
+          <h2><i class="fa fa-plus fa-3x"></i></h2>
+          <h4 class="card-title">Add Actor</h4>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
 
 {% endblock %}
