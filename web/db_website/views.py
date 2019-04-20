@@ -270,6 +270,7 @@ def submit_create_crew(request):
 
     return HttpResponseRedirect(reverse('create_crew'))
 
+
 def media(request):
     # Open database connection
     db = pymysql.connect("database", "root", "example", "project")
@@ -295,7 +296,6 @@ def media(request):
 
     # disconnect from server
     db.close()
-
 
     return render(request, 'media.block.html', {"medias": medias})
 
@@ -338,17 +338,17 @@ def update_media(request, pk):
             cursor = db.cursor()
 
             # Update
-            cursor.execute("UPDATE Media SET MediaName = '"+ media_name+ "', Year = '" +year + 
-            "',Type = '" +mtype+ "',Genre ='"+genre+"',Description = '"+description+"',MPAA_Rating = '" + 
-            mpaa_rating+"',Crit_Rating = '"+crit_rating+"'WHERE MediaID = " + pk)
-                          
+            cursor.execute("UPDATE Media SET MediaName = '" + media_name + "', Year = '" + year +
+                           "',Type = '" + mtype + "',Genre ='"+genre+"',Description = '"+description+"',MPAA_Rating = '" +
+                           mpaa_rating+"',Crit_Rating = '"+crit_rating+"'WHERE MediaID = " + pk)
+
             # Save the changes
             db.commit()
 
             # disconnect from server
             db.close()
 
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('media'))
         else:
             print("form is false")
             return HttpResponseRedirect(reverse('edit_media', args=[pk]))
@@ -368,7 +368,7 @@ def submit_create_media(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = Person(request.POST)
+        form = Media(request.POST)
         # print(request.POST)
         # check whether it's valid:
         if form.is_valid():
@@ -401,6 +401,130 @@ def submit_create_media(request):
             return HttpResponseRedirect(reverse('create_media'))
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = Person()
+        form = Media()
 
     return HttpResponseRedirect(reverse('create_media'))
+
+
+def meme(request):
+        # Open database connection
+    db = pymysql.connect("database", "root", "example", "project")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the meme
+    cursor.execute("SELECT * FROM Memes")
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    memes = []
+    for row in data:
+        meme = {
+            "pk": row[0],
+            "genre": str(row[1]),
+            "format": str(row[2]),
+            "description": str(row[3])
+        }
+        memes.append(meme)
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'meme.block.html', {"memes": memes})
+
+
+def edit_meme(request, pk):
+
+    if pk is None:
+        return
+
+    return render(request, 'edit-meme.block.html')
+
+
+def update_meme(request, pk):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = Meme(request.POST)
+        # print(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # print(form.cleaned_data)
+            genre = form.cleaned_data['genre']
+            description = form.cleaned_data['description']
+            meme_format = form.cleaned_data['meme_format']
+
+            # ensure the pk is safe
+            pk = escape(pk)
+
+            # Update the DB
+            db = pymysql.connect("database", "root", "example", "project")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Update
+            cursor.execute("UPDATE Memes SET Genre = '" + genre + "', Format = '" + meme_format +
+                           "', Description = '" + description + "' WHERE MemeID = " + pk)
+
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('meme'))
+        else:
+            print("form is false")
+            return HttpResponseRedirect(reverse('edit_meme', args=[pk]))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = Meme()
+
+    return HttpResponseRedirect(reverse('edit_meme', args=[pk]))
+
+
+def create_meme(request):
+
+    return render(request, 'create-meme.block.html')
+
+
+def submit_create_meme(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = Meme(request.POST)
+        # print(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # print(form.cleaned_data)
+            genre = form.cleaned_data['genre']
+            description = form.cleaned_data['description']
+            meme_format = form.cleaned_data['meme_format']
+
+            # Update the DB
+            db = pymysql.connect("database", "root", "example", "project")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Insert
+            cursor.execute("INSERT INTO Memes (Genre,Format,Description) VALUES ('" +
+                           genre + "','" + description + "','" + meme_format + "')")
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('meme'))
+        else:
+            # print("form is false")
+            return HttpResponseRedirect(reverse('create_meme'))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = Person()
+
+    return HttpResponseRedirect(reverse('create_meme'))

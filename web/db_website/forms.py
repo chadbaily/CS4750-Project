@@ -17,3 +17,19 @@ class Crew(forms.Form):
     last_name = forms.CharField(label='Last name', max_length=100)
     ctype = forms.CharField(label='Type', max_length=100)
     dob = forms.CharField(label='Date of Birth', max_length=10)
+
+
+class Media(forms.Form):
+    media_name = forms.CharField(label='Media Type', max_length=100)
+    year = forms.CharField(label='Year', max_length=100)
+    mtype = forms.CharField(label='type', max_length=100)
+    genre = forms.CharField(label='genre', max_length=100)
+    description = forms.CharField(label='description', max_length=100)
+    mpaa_rating = forms.CharField(label='rating', max_length=100)
+    crit_rating = forms.CharField(label='crit rating', max_length=100)
+
+
+class Meme(forms.Form):
+    genre = forms.CharField(label='genre', max_length=100)
+    description = forms.CharField(label='description', max_length=100)
+    meme_format = forms.CharField(label='format', max_length=100)
