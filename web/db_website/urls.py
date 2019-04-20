@@ -41,4 +41,7 @@ urlpatterns = [
         name='submit_create_meme'),
     url(r'^meme/create/$', views.create_meme, name='create_meme'),
     url(r'^meme/$', views.meme, name='meme'),
+    
+    url(r'^login/submit/$', views.submit_login, name='submit_login'),
+    url(r'^login/$', views.login, name='login'),
 ]
