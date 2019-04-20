@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^media/create/submit/$', views.submit_create_media, name='submit_create_media'),
     url(r'^media/create/$', views.create_media, name='create_media'),
     url(r'^media/$', views.media, name='media'),
+    url(r'^login/submit/$', views.submit_login, name='submit_login'),
+    url(r'^login/$', views.login, name='login'),
 ]

@@ -404,3 +404,39 @@ def submit_create_media(request):
         form = Person()
 
     return HttpResponseRedirect(reverse('create_media'))
+
+
+def submit_login(request):
+    if request.method == 'POST':
+        
+        form = Login(request.POST)
+
+        if form.is_valid():
+            user_name = form.cleaned_data['user_name']
+            password = form.cleaned_data['password']
+
+            # Prepare to interact with the DB
+            db = pymysql.connect("database","root", "example", "project")
+            cursor = db.cursor()
+
+            # Get all the media
+            cursor.execute("SELECT * FROM Login WHERE user_name = '"+user_name+"' and password = '"+password+"'")
+
+            # Fetch all rows
+            data = cursor.fetchall()
+            print(data)
+            logins = []
+
+            for row in data:
+                login = {
+                    "user_name": row[0]
+                }
+            logins.append(login)
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('media'))
+
+def login(request):
+    return render(request, 'login.block.html')

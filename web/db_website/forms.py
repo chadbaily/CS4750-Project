@@ -14,3 +14,8 @@ class Crew(forms.Form):
     last_name = forms.CharField(label='Last name', max_length=100)
     ctype = forms.CharField(label='Type', max_length=100)
     dob = forms.CharField(label='Date of Birth', max_length=10)
+
+class Login(forms.Form):
+    user_name = forms.CharField(label='User name', max_length = 100)
+    password = forms.CharField(label='Password', max_length = 100)
+    
