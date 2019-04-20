@@ -252,8 +252,8 @@ def submit_create_crew(request):
             cursor = db.cursor()
 
             # Insert
-            cursor.execute("INSERT INTO Crew (FirstN, MiddleN, LastN, Type, DOB) VALUES ('" +
-                           first_name + "','" + middle_name + "','" + last_name + "','" + ctype + "','" + dob + "')")
+            cursor.execute("INSERT INTO Crew (FirstN, MiddleN, LastN, DOB, Type) VALUES ('" +
+                           first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + ctype + "')")
             # Save the changes
             db.commit()
 
