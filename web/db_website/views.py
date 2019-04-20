@@ -300,6 +300,99 @@ def media(request):
     return render(request, 'media.block.html', {"medias": medias})
 
 
+def info_media(request, pk):
+
+    if pk is None:
+        return
+
+    # ensure the pk is safe
+        pk = escape(pk)
+
+    # Get the information about the media
+
+    # Open database connection
+    db = pymysql.connect("database", "root", "example", "project")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the media
+    cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
+
+    # Fetch all rows
+    data = cursor.fetchall()
+
+    if len(data) == 0 or len(data) > 1:
+        return HttpResponseRedirect(reverse('home'))
+
+    if len(data) == 1:
+        print(data)
+        row = data[0]
+        media = {
+            "pk": row[0],
+            "media_name": str(row[1]) + " (" + str(row[2]) + ")",
+            "mtype": row[3],
+            "description": row[5]
+        }
+
+    # Get all the actors references
+    actors_cursor = db.cursor()
+
+    actors_cursor.execute("SELECT * FROM Actors WHERE MediaID = " + pk)
+
+    # Fetch all rows
+    actors_data = actors_cursor.fetchall()
+    print(actors_data)
+    actors = []
+    for row in actors_data:
+        # Get all the actors
+        actor_cursor = db.cursor()
+        actor_cursor.execute(
+            "SELECT * FROM Actor WHERE ActorID = " + str(row[1]))
+        # Fetch all rows
+        actor_data = actor_cursor.fetchall()
+        print(actor_data)
+        for line in actor_data:
+            actor = {
+                "pk": line[0],
+                "name": str(line[1]) + " " + str(line[3]),
+                "role_name": str(row[2]),
+                "gender": line[5]
+            }
+            actors.append(actor)
+
+    # Get all the actors references
+    reviews_cursos = db.cursor()
+
+    reviews_cursos.execute("SELECT * FROM Review_On WHERE MediaID = " + pk)
+
+    # Fetch all rows
+    reviews_data = reviews_cursos.fetchall()
+    print(reviews_data)
+    reviews = []
+    for row in reviews_data:
+        # Get all the reviews
+        review_cursor = db.cursor()
+        review_cursor.execute(
+            "SELECT * FROM Review WHERE ReviewID = " + str(row[0]))
+        # Fetch all rows
+        review_data = review_cursor.fetchall()
+        print(review_data)
+        for line in review_data:
+            review = {
+                "pk": line[0],
+                "rating": str(line[2]),
+                "description": str(line[3])
+            }
+            reviews.append(review)
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "reviews": reviews})
+
+
+
 def edit_media(request, pk):
 
     if pk is None:
