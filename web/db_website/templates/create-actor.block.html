@@ -6,14 +6,15 @@
   <form form action="submit/" method="post">
     {% csrf_token %}
     <div class="form-group">
-      <label for="first_name">Actor First Name</label>
+      <label for="first_name">Actor First Name *</label>
       <input
         type="text"
         class="form-control"
         id="first_name"
         aria-describedby="first_nameHelp"
-        placeholder="John",
+        placeholder="John"
         name="first_name"
+        required
       />
     </div>
     <div class="form-group">
@@ -28,7 +29,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="last_name">Actor Last Name</label>
+      <label for="last_name">Actor Last Name *</label>
       <input
         type="text"
         class="form-control"
@@ -36,15 +37,29 @@
         aria-describedby="last_nameHelp"
         placeholder="Doe"
         name="last_name"
+        required
       />
     </div>
     <div class="form-group">
-      <label for="gender">Gender</label>
-      <input type="text" class="form-control" id="gender" name="gender" />
+      <label for="gender">Gender *</label>
+      <input
+        type="text"
+        class="form-control"
+        id="gender"
+        name="gender"
+        required
+      />
     </div>
     <div class="form-group">
-      <label for="dob">Birthday</label>
-      <input type="text" class="form-control" id="dob" name="dob" placeholder="1969-02-27"/>
+      <label for="dob">Birthday *</label>
+      <input
+        type="text"
+        class="form-control"
+        id="dob"
+        name="dob"
+        placeholder="1969-02-27"
+        required
+      />
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
