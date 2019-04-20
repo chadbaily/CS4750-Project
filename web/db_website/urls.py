@@ -9,4 +9,9 @@ urlpatterns = [
     url(r'^actors/create/submit/$', views.submit_create_actor, name='submit_create_actor'),
     url(r'^actors/create/$', views.create_actor, name='create_actor'),
     url(r'^actors/$', views.actors, name='actors'),
+    url(r'^crews/edit/(?P<pk>[0-9]+)/submit/', views.update_crew, name='update_crew'),
+    url(r'^crews/edit/(?P<pk>[0-9]+)/$', views.edit_crews, name='edit_crew'),
+    url(r'^crews/create/submit/$', views.submit_create_crew, name='submit_create_crew'),
+    url(r'^crews/create/$', views.create_crew, name='create_crew'),
+    url(r'^crews/$', views.crews, name='crews'),
 ]
