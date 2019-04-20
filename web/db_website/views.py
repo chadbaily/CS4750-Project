@@ -544,7 +544,7 @@ def submit_login(request):
             cursor = db.cursor()
 
             # Get all the media
-            cursor.execute("SELECT * FROM Login WHERE user_name = '"+user_name+"' and password = '"+password+"'")
+            cursor.execute("SELECT * FROM User_Login WHERE user_name = '"+user_name+"' and password = '"+password+"'")
 
             # Fetch all rows
             data = cursor.fetchall()
