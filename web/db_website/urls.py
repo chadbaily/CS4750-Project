@@ -14,4 +14,9 @@ urlpatterns = [
     url(r'^crews/create/submit/$', views.submit_create_crew, name='submit_create_crew'),
     url(r'^crews/create/$', views.create_crew, name='create_crew'),
     url(r'^crews/$', views.crews, name='crews'),
+    url(r'^media/edit/(?P<pk>[0-9]+)/submit/', views.update_media, name='update_media'),
+    url(r'^media/edit/(?P<pk>[0-9]+)/$', views.edit_media, name='edit_media'),
+    url(r'^media/create/submit/$', views.submit_create_media, name='submit_create_media'),
+    url(r'^media/create/$', views.create_media, name='create_media'),
+    url(r'^media/$', views.media, name='media'),
 ]

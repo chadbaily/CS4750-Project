@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block title %}medias{% endblock %} {% block content%}
+
+<h1>Media:</h1>
+
+<p>
+  Here below you can find some of our medias!
+</p>
+
+<div class="row">
+  {% for media in medias %}
+  <div class="card col-md-4 card-space">
+    <div class="card-body">
+      <h5 class="card-title">{{ media.media_name }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">media</h6>
+      <!-- <p class="card-text">Birthdate: {{ media.birthdate }}</p> -->
+      <p class="card-text">Type: {{ media.mtype }}</p>
+      <p class="card-text">Description: {{media.description}}</p>
+      <!-- <a href="food/{{ food.pk }}/" class="btn btn-primary">Learn More</a> -->
+      <a href="/media/edit/{{ media.pk }}/" class="card-link">Edit</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% block title %}Create Media{% endblock %} {% block content%}
+
+<h1>Create Media</h1>
+
+<div class="col-md-6">
+  <form form action="submit/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="media_name">Media Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="media_name"
+        aria-describedby="media_nameHelp"
+        placeholder="Doe"
+        name="media_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="dob">Year</label>
+      <input type="text" class="form-control" id="year" name="year" placeholder="1969"/>
+    </div>
+    <div class="form-group">
+      <label for="mtype">Media Type</label>
+      <input type="text" class="form-control" id="mtype" name="mtype" />
+    </div>
+    <div class="form-group">
+      <label for="Genre">Genre</label>
+      <input
+        type="text"
+        class="form-control"
+        id="genre"
+        aria-describedby="genreHelp"
+        placeholder="Drama"
+        name="genre"
+      />
+    </div>
+    <div class="form-group">
+      <label for="Description">Description</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        aria-describedby="descriptionHelp"
+        placeholder="Doe"
+        name="description"
+      />
+    </div>
+    <div class="form-group">
+      <label for="media_name">MPAA Rating:</label>
+      <select class="form-control" id="mpaa_rating"  name="mpaa_rating">
+        <option value="Unrated"> Unrated </option>
+        <option value="NC-17"> NC-17 </option>
+        <option value="R"> R </option>
+        <option value="PG-13"> PG-13 </option>
+        <option value="PG"> PG </option>
+        <option value="G"> G </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="crit_rating">Critics' Rating</label>
+      <input
+        type="text"
+        class="form-control"
+        id="crit_rating"
+        aria-describedby="crit_ratingHelp"
+        placeholder="Doe"
+        name="crit_rating"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -269,3 +269,138 @@ def submit_create_crew(request):
         form = Crew()
 
     return HttpResponseRedirect(reverse('create_crew'))
+
+def media(request):
+    # Open database connection
+    db = pymysql.connect("database", "root", "example", "project")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the media
+    cursor.execute("SELECT * FROM Media")
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    medias = []
+    for row in data:
+        media = {
+            "pk": row[0],
+            "media_name": str(row[1]) + " (" + str(row[2]) + ")",
+            "mtype": row[3],
+            "description": row[5]
+        }
+        medias.append(media)
+
+    # disconnect from server
+    db.close()
+
+
+    return render(request, 'media.block.html', {"medias": medias})
+
+
+def edit_media(request, pk):
+
+    if pk is None:
+        return
+
+    return render(request, 'edit-media.block.html')
+
+
+def update_media(request, pk):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = Media(request.POST)
+        # print(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # print(form.cleaned_data)
+            media_name = form.cleaned_data["media_name"]
+            year = form.cleaned_data['year']
+            mtype = form.cleaned_data['mtype']
+            genre = form.cleaned_data['genre']
+            description = form.cleaned_data['description']
+            mpaa_rating = form.cleaned_data['mpaa_rating']
+            crit_rating = form.cleaned_data['crit_rating']
+
+            # ensure the pk is safe
+            pk = escape(pk)
+
+            # print("UPDATE Media SET FirstN = '" + first_name + "', MiddleN = '" + middle_name + "', LastN = '" +
+            #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE MediaID = " + pk)
+
+            # Update the DB
+            db = pymysql.connect("database", "root", "example", "project")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Update
+            cursor.execute("UPDATE Media SET MediaName = '"+ media_name+ "', Year = '" +year + 
+            "',Type = '" +mtype+ "',Genre ='"+genre+"',Description = '"+description+"',MPAA_Rating = '" + 
+            mpaa_rating+"',Crit_Rating = '"+crit_rating+"'WHERE MediaID = " + pk)
+                          
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            print("form is false")
+            return HttpResponseRedirect(reverse('edit_media', args=[pk]))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = Media()
+
+    return HttpResponseRedirect(reverse('edit_media', args=[pk]))
+
+
+def create_media(request):
+
+    return render(request, 'create-media.block.html')
+
+
+def submit_create_media(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = Person(request.POST)
+        # print(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            media_name = form.cleaned_data["media_name"]
+            year = form.cleaned_data['year']
+            mtype = form.cleaned_data['mtype']
+            genre = form.cleaned_data['genre']
+            description = form.cleaned_data['description']
+            mpaa_rating = form.cleaned_data['mpaa_rating']
+            crit_rating = form.cleaned_data['crit_rating']
+
+            # Update the DB
+            db = pymysql.connect("database", "root", "example", "project")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Insert
+            cursor.execute("INSERT INTO Media (MediaName,Year,Type,Genre,Description,MPAA_Rating,Crit_Rating) VALUES ('" +
+                           media_name + "','" + year + "','" + mtype + "','" + genre + "','" + description + "','" + mpaa_rating + "','" + crit_rating + "')")
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('media'))
+        else:
+            # print("form is false")
+            return HttpResponseRedirect(reverse('create_media'))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = Person()
+
+    return HttpResponseRedirect(reverse('create_media'))
