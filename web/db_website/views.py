@@ -657,3 +657,115 @@ def submit_login(request):
 
 def login(request):
     return render(request, 'login.block.html')
+
+
+
+def review(request):
+        # Open database connection
+    db = pymysql.connect("database", "root", "example", "project")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the meme
+    cursor.execute("SELECT * FROM Review")
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    reviews = []
+    for row in data:
+        review = {
+            "pk": row[0],
+            "media_id": str(row[1]),
+            "rating": str(row[2]),
+            "description": str(row[3])
+        }
+        reviews.append(meme)
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'review.block.html', {"reviews": reviews})
+
+def submit_review(request):
+    if request.method == 'POST':
+        
+        form = Review(request.POST)
+
+        if form.is_valid():
+
+            media_id = form.cleaned_data['media_id']
+            rating = form.cleaned_data['rating']
+            description = form.cleaned_data['description']
+
+            # Update the DB
+            db = pymysql.connect("database", "root", "example", "project")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Insert
+            cursor.execute("INSERT INTO Review (MediaID,Rating,Description) VALUES ('" +
+                           media_id+ "','" + rating + "','" + description + "')")
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('review'))
+
+
+def update_review(request, pk):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = Review(request.POST)
+        # print(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # print(form.cleaned_data)
+            media_id = form.cleaned_data['media_id']
+            rating = form.cleaned_data['rating']
+            description = form.cleaned_data['description']
+
+            # ensure the pk is safe
+            pk = escape(pk)
+
+            # Update the DB
+            db = pymysql.connect("database", "root", "example", "project")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Update
+            cursor.execute("UPDATE Review SET MediaID = '" + media_id + "', Rating = '" + rating +
+                           "', Description = '" + description + "' WHERE ReviewID = " + pk)
+
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('review'))
+        else:
+            print("form is false")
+            return HttpResponseRedirect(reverse('edit_review', args=[pk]))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = Review()
+
+    return HttpResponseRedirect(reverse('edit_review', args=[pk]))
+
+def edit_review(request, pk):
+    if pk is None:
+        return
+
+    return render(request, 'edit-review.block.html')
+
+def create_review(request):
+    return render(request, 'create-review.block.html')
+
+    

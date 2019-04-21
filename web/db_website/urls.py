@@ -45,4 +45,13 @@ urlpatterns = [
     
     url(r'^login/submit/$', views.submit_login, name='submit_login'),
     url(r'^login/$', views.login, name='login'),
+
+    url(r'^review/edit/(?P<pk>[0-9]+)submit/',
+        views.update_review, name='update_review'),
+    url(r'^review/edit/(?P<pk>[0-9]+)/$', views.edit_review, name='edit_review'),
+    url(r'^review/create/submit/$', views.submit_review,
+        name='submit_review'),
+    url(r'^review/create/$', views.create_review, name='create_review'),
+    url(r'^review/$', views.review, name='review'),
+
 ]
