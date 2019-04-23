@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^crews/create/submit/$', views.submit_create_crew,
         name='submit_create_crew'),
     url(r'^crews/create/$', views.create_crew, name='create_crew'),
+    url(r'^crews/info/(?P<pk>[0-9]+)/$', views.info_crew, name='info_crew'),
     url(r'^crews/$', views.crews, name='crews'),
 
     # Media

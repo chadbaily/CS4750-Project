@@ -419,6 +419,58 @@ def info_media(request, pk):
             }
             actors.append(actor)
 
+    crews_cursor = db.cursor()
+    crews_cursor.execute("SELECT * FROM Crews WHERE MediaID = " + pk)
+
+    # Fetch all rows
+    crews_data = crews_cursor.fetchall()
+    print(crews_data)
+    crews = []
+    for row in crews_data:
+        # Get all the crews
+        crew_cursor = db.cursor()
+        crew_cursor.execute(
+            "SELECT * FROM Crew WHERE CrewID = " + str(row[0]))
+        # Fetch all rows
+        crew_data = crew_cursor.fetchall()
+        print(crew_data)
+        for line in crew_data:
+            crew = {
+                "pk": line[0],
+                "name": str(line[1]) + " " + str(line[3]),
+                "ctype": str(row[2]),
+            }
+            crews.append(crew)
+
+    memes_cursor = db.cursor()
+    memes_cursor.execute("SELECT * FROM InReferenceTo WHERE MediaID = " + pk)
+
+    # Fetch all rows
+    memes_data = memes_cursor.fetchall()
+    print(memes_data)
+    memes = []
+    for row in memes_data:
+        # Get all the memes
+        meme_cursor = db.cursor()
+        meme_cursor.execute(
+            "SELECT * FROM Memes WHERE MemeID = " + str(row[0]))
+        # Fetch all rows
+        meme_data = meme_cursor.fetchall()
+        print(meme_data)
+        for line in meme_data:
+            meme = {
+                "pk": line[0],
+                "genre": str(line[1]),
+                "format": str(line[2]),
+                "description" : str(line[3])
+            }
+            memes.append(meme)
+
+
+
+
+
+
     # Get all the actors references
     reviews_cursos = db.cursor()
 
@@ -444,11 +496,9 @@ def info_media(request, pk):
                 "description": str(line[3])
             }
             reviews.append(review)
-
     # disconnect from server
     db.close()
-
-    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "reviews": reviews, "login": user})
+    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews":crews, "memes":memes, "reviews": reviews, "login": user})
 
 
 def edit_media(request, pk):
@@ -966,3 +1016,76 @@ def logout(request):
     response = HttpResponseRedirect(reverse('login'))
     response.delete_cookie("user")
     return response
+
+def info_crew(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    if pk is None:
+        return
+
+    # ensure the pk is safe
+        pk = escape(pk)
+
+    # Get the information about the media
+
+    # Open database connection
+    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the media
+    cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
+
+    # Fetch all rows
+    data = cursor.fetchall()
+
+    if len(data) == 0 or len(data) > 1:
+        return HttpResponseRedirect(reverse('home'))
+
+    if len(data) == 1:
+        print(data)
+        row = data[0]
+        crew = {
+            "pk": row[0],
+            "crew_name": str(row[1]) + " " + str(row[3]),
+            "dob": row[4],
+            "ctype": row[5],
+            
+        }
+
+    # Get all the crews references
+    actors_cursor = db.cursor()
+
+    actors_cursor.execute("SELECT * FROM Crews WHERE CrewID = " + pk)
+
+    # Fetch all rows
+    actors_data = actors_cursor.fetchall()
+    print(actors_data)
+    medias = []
+    for row in actors_data:
+        # Get all the crews
+        media_cursor = db.cursor()
+        media_cursor.execute(
+            "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
+        # Fetch all rows
+        media_data = media_cursor.fetchall()
+        print(media_data)
+        for line in media_data:
+            media = {
+                "pk": line[0],
+                "name": str(line[1]) + " (" + str(line[2]) + ")",
+                "ctype": str(row[2]),
+            }
+            medias.append(media)
+
+    # Get all the crews references
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'info-crew.block.html', {"medias": medias, "crew": crew,"login":user})
+

@@ -29,6 +29,38 @@
  
   {% endfor %}
 </div>
+{% endif %}{% if actors|length > 0 %}
+<h3>Crews working on {{ media.media_name }}</h3>
+<div class="row">
+  {% for crew in crews %}
+  
+  <div class="card col-md-4 card-space">
+    <div class="card-body">
+      <a href = "/crews/info/{{crew.pk}}">
+        <h5 class="card-title">{{ crew.name }}</h5>
+      </a>
+      <h6 class="card-subtitle mb-2 text-muted">Crew Type: {{ crew.ctype }}</h6>
+    </div>
+  </div>
+ 
+  {% endfor %}
+</div>
+{% endif %}{% if memes|length > 0 %}
+<h3>Memes about {{ media.media_name }}</h3>
+<div class="row">
+  {% for meme in memes %}
+  <div class="card col-md-4 card-space">
+      <div class="card-body">
+        <h5 class="card-title">{{ meme.genre }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Meme</h6>
+        <!-- <p class="card-text">Birthdate: {{ media.birthdate }}</p> -->
+        <p class="card-text">Format: {{ meme.format }}</p>
+        <p class="card-text">Description: {{ meme.description }}</p>
+        <!-- <a href="food/{{ food.pk }}/" class="btn btn-primary">Learn More</a> -->
+      </div>
+    </div>
+  {% endfor %}
+</div>
 {% endif %} {% if reviews|length > 0 %}
 <h3>Reviews for {{ media.media_name }}</h3>
 <div class="row">
