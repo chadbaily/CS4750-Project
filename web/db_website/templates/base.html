@@ -26,6 +26,7 @@
   </head>
 
   <body>
+    {% if login %}
     <ul class="nav">
       <li class="nav-item">
         <a class="nav-link active" href="/">Home</a>
@@ -51,6 +52,7 @@
         >
       </li> -->
     </ul>
+    {% endif %}
     <div class="container" id="content">
       {% block content %} {% endblock %}
     </div>

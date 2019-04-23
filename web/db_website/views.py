@@ -11,11 +11,21 @@ import pymysql
 
 
 def home(request):
-      # Return the home page
-    return render(request, 'home.block.html')
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    # Return the home page
+    return render(request, 'home.block.html', {"login": user})
 
 
 def actors(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
     # Open database connection
     db = pymysql.connect("mysql.cs.virginia.edu",
                          "ceb4aq", "ib5pW8ZR", "ceb4aq")
@@ -41,18 +51,28 @@ def actors(request):
     # disconnect from server
     db.close()
 
-    return render(request, 'actors.block.html', {"actors": actors})
+    return render(request, 'actors.block.html', {"actors": actors, "login": user})
 
 
 def edit_actors(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
     if pk is None:
         return
 
-    return render(request, 'edit-actor.block.html')
+    return render(request, 'edit-actor.block.html', {"login": user})
 
 
 def update_actor(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -89,20 +109,25 @@ def update_actor(request, pk):
             # disconnect from server
             db.close()
 
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('home'), {"login": user})
         else:
             print("form is false")
-            return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
+            return HttpResponseRedirect(reverse('edit_actor', args=[pk]), {"login": user})
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Person()
 
-    return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
+    return HttpResponseRedirect(reverse('edit_actor', args=[pk]), {"login": user})
 
 
 def create_actor(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
-    return render(request, 'create-actor.block.html')
+    return render(request, 'create-actor.block.html', {"login": user})
 
 
 def submit_create_actor(request):
@@ -147,6 +172,11 @@ def submit_create_actor(request):
 
 
 def crews(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
     # Open database connection
     db = pymysql.connect("mysql.cs.virginia.edu",
                          "ceb4aq", "ib5pW8ZR", "ceb4aq")
@@ -172,15 +202,20 @@ def crews(request):
     # disconnect from server
     db.close()
 
-    return render(request, 'crews.block.html', {"crews": crews})
+    return render(request, 'crews.block.html', {"crews": crews, "login": user})
 
 
 def edit_crews(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
     if pk is None:
         return
 
-    return render(request, 'edit-crew.block.html')
+    return render(request, 'edit-crew.block.html', {"login": user})
 
 
 def update_crew(request, pk):
@@ -232,8 +267,13 @@ def update_crew(request, pk):
 
 
 def create_crew(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
-    return render(request, 'create-crew.block.html')
+    return render(request, 'create-crew.block.html', {"login": user})
 
 
 def submit_create_crew(request):
@@ -278,6 +318,11 @@ def submit_create_crew(request):
 
 
 def media(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
     # Open database connection
     db = pymysql.connect("mysql.cs.virginia.edu",
                          "ceb4aq", "ib5pW8ZR", "ceb4aq")
@@ -304,10 +349,15 @@ def media(request):
     # disconnect from server
     db.close()
 
-    return render(request, 'media.block.html', {"medias": medias})
+    return render(request, 'media.block.html', {"medias": medias, "login": user})
 
 
 def info_media(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
     if pk is None:
         return
@@ -398,15 +448,20 @@ def info_media(request, pk):
     # disconnect from server
     db.close()
 
-    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "reviews": reviews})
+    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "reviews": reviews, "login": user})
 
 
 def edit_media(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
     if pk is None:
         return
 
-    return render(request, 'edit-media.block.html')
+    return render(request, 'edit-media.block.html', {"login": user})
 
 
 def update_media(request, pk):
@@ -462,8 +517,13 @@ def update_media(request, pk):
 
 
 def create_media(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
-    return render(request, 'create-media.block.html')
+    return render(request, 'create-media.block.html', {"login": user})
 
 
 def submit_create_media(request):
@@ -510,7 +570,12 @@ def submit_create_media(request):
 
 
 def meme(request):
-        # Open database connection
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    # Open database connection
     db = pymysql.connect("mysql.cs.virginia.edu",
                          "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
@@ -536,15 +601,20 @@ def meme(request):
     # disconnect from server
     db.close()
 
-    return render(request, 'meme.block.html', {"memes": memes})
+    return render(request, 'meme.block.html', {"memes": memes, "login": user})
 
 
 def edit_meme(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
     if pk is None:
         return
 
-    return render(request, 'edit-meme.block.html')
+    return render(request, 'edit-meme.block.html', {"login": user})
 
 
 def update_meme(request, pk):
@@ -592,8 +662,13 @@ def update_meme(request, pk):
 
 
 def create_meme(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
 
-    return render(request, 'create-meme.block.html')
+    return render(request, 'create-meme.block.html', {"login": user})
 
 
 def submit_create_meme(request):
@@ -656,15 +731,19 @@ def submit_login(request):
 
             # Fetch all rows
             data = cursor.fetchall()
-            print(data)
-            priv = data[0][3]
-
             # disconnect from server
             db.close()
-
+            print(data)
             if(len(data) == 1):
+                priv = data[0][3]
+                # Add cookie
                 response = HttpResponseRedirect(reverse('media'))
                 response.set_cookie("user", priv)
+
+                # Delete cookie
+                # response = HttpResponseRedirect(reverse('login'))
+                # response.delete_cookie("auth")
+                # return response
                 return response
             else:
                 return HttpResponseRedirect(reverse('login'))
@@ -675,7 +754,12 @@ def login(request):
 
 
 def review(request):
-        # Open database connection
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    # Open database connection
     db = pymysql.connect("mysql.cs.virginia.edu",
                          "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
@@ -706,7 +790,7 @@ def review(request):
     # disconnect from server
     db.close()
 
-    return render(request, 'review.block.html', {"reviews": reviews})
+    return render(request, 'review.block.html', {"reviews": reviews, "login": user})
 
 
 def submit_review(request):
@@ -784,11 +868,21 @@ def update_review(request, pk):
 
 
 def edit_review(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
     if pk is None:
         return
 
-    return render(request, 'edit-review.block.html')
+    return render(request, 'edit-review.block.html', {"login": user})
 
 
 def create_review(request):
-    return render(request, 'create-review.block.html')
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    return render(request, 'create-review.block.html', {"login": user})
