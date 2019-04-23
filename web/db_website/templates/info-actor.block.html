@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block title %}Media Info{% endblock %} {% block content%}
+
+<h1>{{ actor.actor_name }}</h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Date of Birth</dt>
+  <dd class="col-sm-9">{{ actor.dob }}</dd>
+
+  <dt class="col-sm-3">Gender</dt>
+  <dd class="col-sm-9">{{ actor.gender }}</dd>
+
+  <dt class="col-sm-3">Place of Birth</dt>
+  <dd class="col-sm-9">{{ actor.pob }}</dd>
+</dl>
+
+{% if medias|length > 0 %}
+<h3>Media {{actor.actor_name}} stars in:</h3>
+<div class="row">
+  {% for media in medias %}
+  
+  <div class="card col-md-4 card-space">
+    <div class="card-body">
+      <a href = "/media/info/{{ media.pk }}/">
+        <h5 class="card-title">{{ media.name }}</h5>
+      </a>
+      <h6 class="card-subtitle mb-2 text-muted">Role: {{ actor.role_name }}</h6>
+    </div>
+  </div>
+  
+  {% endfor %}
+</div>
+
+{% endif %} {% endblock %}
