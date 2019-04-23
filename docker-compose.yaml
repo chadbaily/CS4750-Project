@@ -2,29 +2,10 @@
 version: '3.1'
 
 services:
-  db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    volumes:
-      - ./db/:/var/lib/mysql
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      - PMA_ARBITRARY=1
-    restart: always
-    ports:
-      - 8082:80
-    volumes:
-      - ./php/:/sessions
   web:
     image: tp33/django
     ports:
       - 8000:8000
-    links:
-      - db:database
     volumes:
       - ./web/:/app
     command: bash -c " pip install --upgrade -r requirements.txt
