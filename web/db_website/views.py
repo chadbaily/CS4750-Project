@@ -368,6 +368,7 @@ def info_media(request, pk):
 
     # Fetch all rows
     reviews_data = reviews_cursos.fetchall()
+    print("Reviews on " + pk)
     print(reviews_data)
     reviews = []
     for row in reviews_data:
