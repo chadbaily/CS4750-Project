@@ -3,7 +3,7 @@ from django.views.generic.base import RedirectView
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.media, name='home'),
 
     # Actors
     url(r'^actors/edit/(?P<pk>[0-9]+)/submit/',
@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^media/create/submit/$', views.submit_create_media,
         name='submit_create_media'),
     url(r'^media/create/$', views.create_media, name='create_media'),
-    url(r'^media/$', views.media, name='media'),
+    url(r'^$', views.media, name='media'),
 
     # Memes
     url(r'^meme/edit/(?P<pk>[0-9]+)/submit/',
@@ -46,7 +46,7 @@ urlpatterns = [
     url(r'^login/submit/$', views.submit_login, name='submit_login'),
     url(r'^login/$', views.login, name='login'),
 
-    url(r'^review/edit/(?P<pk>[0-9]+)submit/',
+    url(r'^review/edit/(?P<pk>[0-9]+)/submit/$',
         views.update_review, name='update_review'),
     url(r'^review/edit/(?P<pk>[0-9]+)/$', views.edit_review, name='edit_review'),
     url(r'^review/create/submit/$', views.submit_review,

@@ -392,7 +392,6 @@ def info_media(request, pk):
     return render(request, 'info-media.block.html', {"media": media, "actors": actors, "reviews": reviews})
 
 
-
 def edit_media(request, pk):
 
     if pk is None:
@@ -625,7 +624,7 @@ def submit_create_meme(request):
 
 def submit_login(request):
     if request.method == 'POST':
-        
+
         form = Login(request.POST)
 
         if form.is_valid():
@@ -633,11 +632,12 @@ def submit_login(request):
             password = form.cleaned_data['password']
 
             # Prepare to interact with the DB
-            db = pymysql.connect("database","root", "example", "project")
+            db = pymysql.connect("database", "root", "example", "project")
             cursor = db.cursor()
 
             # Get all the media
-            cursor.execute("SELECT * FROM User_Login WHERE user_name = '"+user_name+"' and password = '"+password+"'")
+            cursor.execute("SELECT * FROM User_Login WHERE user_name = '" +
+                           user_name+"' and password = '"+password+"'")
 
             # Fetch all rows
             data = cursor.fetchall()
@@ -655,9 +655,9 @@ def submit_login(request):
 
             return HttpResponseRedirect(reverse('media'))
 
+
 def login(request):
     return render(request, 'login.block.html')
-
 
 
 def review(request):
@@ -675,22 +675,28 @@ def review(request):
     print(data)
     reviews = []
     for row in data:
+        mediaCursor = db.cursor()
+        mediaCursor.execute(
+            "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        mediaData = mediaCursor.fetchall()
+        # print(mediaData)
         review = {
             "pk": row[0],
-            "media_id": str(row[1]),
+            "media_name": str(mediaData[0][1]) + " (" + str(mediaData[0][2]) + ")",
             "rating": str(row[2]),
             "description": str(row[3])
         }
-        reviews.append(meme)
+        reviews.append(review)
 
     # disconnect from server
     db.close()
 
     return render(request, 'review.block.html', {"reviews": reviews})
 
+
 def submit_review(request):
     if request.method == 'POST':
-        
+
         form = Review(request.POST)
 
         if form.is_valid():
@@ -707,7 +713,7 @@ def submit_review(request):
 
             # Insert
             cursor.execute("INSERT INTO Review (MediaID,Rating,Description) VALUES ('" +
-                           media_id+ "','" + rating + "','" + description + "')")
+                           media_id + "','" + rating + "','" + description + "')")
             # Save the changes
             db.commit()
 
@@ -759,13 +765,13 @@ def update_review(request, pk):
 
     return HttpResponseRedirect(reverse('edit_review', args=[pk]))
 
+
 def edit_review(request, pk):
     if pk is None:
         return
 
     return render(request, 'edit-review.block.html')
 
+
 def create_review(request):
     return render(request, 'create-review.block.html')
-
-    

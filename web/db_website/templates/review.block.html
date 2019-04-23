@@ -19,7 +19,7 @@
     {% for review in reviews %}
     <div class="card col-md-4 card-space">
       <div class="card-body">
-        <h5 class="card-title">{{ review.media_id }}</h5>
+        <h5 class="card-title">Review on {{ review.media_name }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">Review</h6>
         <!-- <p class="card-text">Birthdate: {{ media.birthdate }}</p> -->
         <p class="card-text">Format: {{ review.rating }}</p>
