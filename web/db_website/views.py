@@ -9,8 +9,13 @@ import json
 import requests
 import pymysql
 
+users = ['ceb4aq_a', 'ceb4aq_b', 'ceb4aq_c', 'ceb4aq_d']
+db_user = 'ceb4aq'
+
 
 def home(request):
+    global db_user
+    print(db_user)
     user = request.COOKIES.get('user')
     if(not user):
         response = HttpResponseRedirect(reverse('login'))
@@ -21,14 +26,18 @@ def home(request):
 
 
 def actors(request):
+    global db_user
+    print(db_user)
+
     user = request.COOKIES.get('user')
     if(not user):
         response = HttpResponseRedirect(reverse('login'))
         response.delete_cookie("user")
         return response
     # Open database connection
+
     db = pymysql.connect("mysql.cs.virginia.edu",
-                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                         db_user, "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -94,8 +103,10 @@ def update_actor(request, pk):
             #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE ActorID = " + pk)
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -145,8 +156,10 @@ def submit_create_actor(request):
             dob = form.cleaned_data['dob']
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -178,8 +191,10 @@ def crews(request):
         response.delete_cookie("user")
         return response
     # Open database connection
+    global db_user
+
     db = pymysql.connect("mysql.cs.virginia.edu",
-                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                         db_user, "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -240,8 +255,10 @@ def update_crew(request, pk):
             #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE crewID = " + pk)
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -291,8 +308,10 @@ def submit_create_crew(request):
             dob = form.cleaned_data['dob']
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -324,8 +343,10 @@ def media(request):
         response.delete_cookie("user")
         return response
     # Open database connection
+    global db_user
+
     db = pymysql.connect("mysql.cs.virginia.edu",
-                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                         db_user, "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -368,8 +389,10 @@ def info_media(request, pk):
     # Get the information about the media
 
     # Open database connection
+    global db_user
+
     db = pymysql.connect("mysql.cs.virginia.edu",
-                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                         db_user, "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -538,8 +561,10 @@ def update_media(request, pk):
             #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE MediaID = " + pk)
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -593,9 +618,10 @@ def submit_create_media(request):
             crit_rating = form.cleaned_data['crit_rating']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            global db_user
 
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 db_user, "ib5pW8ZR", "ceb4aq")
             # Prepare to interact with the DB
             cursor = db.cursor()
 
@@ -626,9 +652,10 @@ def meme(request):
         response.delete_cookie("user")
         return response
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu",
-                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    global db_user
 
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
     # Prepare to interact with the DB
     cursor = db.cursor()
 
@@ -684,9 +711,10 @@ def update_meme(request, pk):
             pk = escape(pk)
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            global db_user
 
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 db_user, "ib5pW8ZR", "ceb4aq")
             # Prepare to interact with the DB
             cursor = db.cursor()
 
@@ -735,9 +763,10 @@ def submit_create_meme(request):
             meme_format = form.cleaned_data['meme_format']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            global db_user
 
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 db_user, "ib5pW8ZR", "ceb4aq")
             # Prepare to interact with the DB
             cursor = db.cursor()
 
@@ -771,8 +800,11 @@ def submit_login(request):
             password = form.cleaned_data['password']
 
             # Prepare to interact with the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
+
             cursor = db.cursor()
 
             # Get all the media
@@ -789,6 +821,11 @@ def submit_login(request):
                 # Add cookie
                 response = HttpResponseRedirect(reverse('media'))
                 response.set_cookie("user", priv)
+
+                global users
+
+                db_user = users[priv]
+                print("login: " + str(db_user))
 
                 # Delete cookie
                 # response = HttpResponseRedirect(reverse('login'))
@@ -810,8 +847,10 @@ def review(request):
         response.delete_cookie("user")
         return response
     # Open database connection
+    global db_user
+
     db = pymysql.connect("mysql.cs.virginia.edu",
-                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                         db_user, "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -855,8 +894,10 @@ def submit_review(request):
             description = form.cleaned_data['description']
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -890,8 +931,10 @@ def update_review(request, pk):
             pk = escape(pk)
 
             # Update the DB
+            global db_user
+
             db = pymysql.connect("mysql.cs.virginia.edu",
-                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
+                                 db_user, "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
