@@ -781,3 +781,74 @@ def edit_review(request, pk):
 
 def create_review(request):
     return render(request, 'create-review.block.html')
+
+
+
+def info_actor(request, pk):
+
+    if pk is None:
+        return
+
+    # ensure the pk is safe
+        pk = escape(pk)
+
+    # Get the information about the media
+
+    # Open database connection
+    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the media
+    cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
+
+    # Fetch all rows
+    data = cursor.fetchall()
+
+    if len(data) == 0 or len(data) > 1:
+        return HttpResponseRedirect(reverse('home'))
+
+    if len(data) == 1:
+        print(data)
+        row = data[0]
+        actor = {
+            "pk": row[0],
+            "actor_name": str(row[1]) + " " + str(row[3]),
+            "dob": row[4],
+            "gender": row[5],
+            "pob" : str(row[6]) + ", " + str(row[7])
+        }
+
+    # Get all the actors references
+    actors_cursor = db.cursor()
+
+    actors_cursor.execute("SELECT * FROM Actors WHERE ActorID = " + pk)
+
+    # Fetch all rows
+    actors_data = actors_cursor.fetchall()
+    print(actors_data)
+    medias = []
+    for row in actors_data:
+        # Get all the actors
+        media_cursor = db.cursor()
+        media_cursor.execute(
+            "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
+        # Fetch all rows
+        media_data = media_cursor.fetchall()
+        print(media_data)
+        for line in media_data:
+            media = {
+                "pk": line[0],
+                "name": str(line[1]) + " (" + str(line[2]) + ")",
+                "role_name": str(row[2]),
+            }
+            medias.append(media)
+
+    # Get all the actors references
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'info-actor.block.html', {"medias": medias, "actor": actor})
+

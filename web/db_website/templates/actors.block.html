@@ -19,7 +19,9 @@
     {% for actor in actors %}
     <div class="card col-md-4 card-space">
       <div class="card-body">
+        <a href = "/actors/info/{{actor.pk}}">
         <h5 class="card-title">{{ actor.name }}</h5>
+        </a>
         <h6 class="card-subtitle mb-2 text-muted">Actor</h6>
         <!-- <p class="card-text">Birthdate: {{ actor.birthdate }}</p> -->
         <p class="card-text">Gender: {{ actor.gender }}</p>

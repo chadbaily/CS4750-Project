@@ -16,13 +16,17 @@
 <h3>Actors staring in {{ media.media_name }}</h3>
 <div class="row">
   {% for actor in actors %}
+  
   <div class="card col-md-4 card-space">
     <div class="card-body">
-      <h5 class="card-title">{{ actor.name }}</h5>
+      <a href = "/actors/info/{{actor.pk}}">
+        <h5 class="card-title">{{ actor.name }}</h5>
+      </a>
       <h6 class="card-subtitle mb-2 text-muted">Role: {{ actor.role_name }}</h6>
       <p class="card-text">Gender: {{ actor.gender }}</p>
     </div>
   </div>
+ 
   {% endfor %}
 </div>
 {% endif %} {% if reviews|length > 0 %}
