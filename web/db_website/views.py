@@ -17,7 +17,8 @@ def home(request):
 
 def actors(request):
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -73,7 +74,8 @@ def update_actor(request, pk):
             #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE ActorID = " + pk)
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -118,7 +120,8 @@ def submit_create_actor(request):
             dob = form.cleaned_data['dob']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -145,7 +148,8 @@ def submit_create_actor(request):
 
 def crews(request):
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -201,7 +205,8 @@ def update_crew(request, pk):
             #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE crewID = " + pk)
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -246,7 +251,8 @@ def submit_create_crew(request):
             dob = form.cleaned_data['dob']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -273,7 +279,8 @@ def submit_create_crew(request):
 
 def media(request):
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -311,7 +318,8 @@ def info_media(request, pk):
     # Get the information about the media
 
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -425,7 +433,8 @@ def update_media(request, pk):
             #       last_name + "', Gender = '" + gender + "', DOB = '" + dob + "'  WHERE MediaID = " + pk)
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -474,7 +483,8 @@ def submit_create_media(request):
             crit_rating = form.cleaned_data['crit_rating']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -501,7 +511,8 @@ def submit_create_media(request):
 
 def meme(request):
         # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -553,7 +564,8 @@ def update_meme(request, pk):
             pk = escape(pk)
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -598,7 +610,8 @@ def submit_create_meme(request):
             meme_format = form.cleaned_data['meme_format']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -633,7 +646,8 @@ def submit_login(request):
             password = form.cleaned_data['password']
 
             # Prepare to interact with the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
             cursor = db.cursor()
 
             # Get all the media
@@ -643,24 +657,18 @@ def submit_login(request):
             # Fetch all rows
             data = cursor.fetchall()
             print(data)
-            logins = []
-
-            for row in data:
-                login = {
-                    "user_name": row[0]
-                }
-                logins.append(login)
+            priv = data[0][3]
 
             # disconnect from server
             db.close()
 
-            print(logins)
-            login_json = json.loads(''.join(logins))
-            if(len(logins) >= 1):
+            if(len(data) == 1):
                 response = HttpResponseRedirect(reverse('media'))
-                response.set_cookie("user", login_json[0].user_name)
-                return HttpResponseRedirect(reverse('media'))
-            return HttpResponseRedirect(reverse('login'))
+                response.set_cookie("user", priv)
+                return response
+            else:
+                return HttpResponseRedirect(reverse('login'))
+
 
 def login(request):
     return render(request, 'login.block.html')
@@ -668,7 +676,8 @@ def login(request):
 
 def review(request):
         # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
@@ -712,7 +721,8 @@ def submit_review(request):
             description = form.cleaned_data['description']
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
@@ -746,7 +756,8 @@ def update_review(request, pk):
             pk = escape(pk)
 
             # Update the DB
-            db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
             # Prepare to interact with the DB
             cursor = db.cursor()
