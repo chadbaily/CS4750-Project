@@ -43,9 +43,14 @@ urlpatterns = [
     url(r'^meme/create/$', views.create_meme, name='create_meme'),
     url(r'^meme/$', views.meme, name='meme'),
     
+    # Login
     url(r'^login/submit/$', views.submit_login, name='submit_login'),
     url(r'^login/$', views.login, name='login'),
 
+    # Logout
+    url(r'^logout/$', views.logout, name='logout'),
+
+    # Review
     url(r'^review/edit/(?P<pk>[0-9]+)/submit/$',
         views.update_review, name='update_review'),
     url(r'^review/edit/(?P<pk>[0-9]+)/$', views.edit_review, name='edit_review'),

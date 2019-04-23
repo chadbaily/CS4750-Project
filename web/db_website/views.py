@@ -886,3 +886,9 @@ def create_review(request):
         response.delete_cookie("user")
         return response
     return render(request, 'create-review.block.html', {"login": user})
+
+
+def logout(request):
+    response = HttpResponseRedirect(reverse('login'))
+    response.delete_cookie("user")
+    return response
