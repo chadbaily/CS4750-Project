@@ -228,7 +228,6 @@ def submit_create_actor(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = Person(request.POST)
-        # print(request.POST)
         # check whether it's valid:
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
@@ -251,16 +250,17 @@ def submit_create_actor(request):
             # Insert
             try:
                 cursor.execute("INSERT INTO Actor (FirstN, MiddleN, LastN, DOB, Gender, BirthCountry, BirthCity) VALUES ('" +
-                               first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "','" + birth_country + "','" + birth_city + ")")
+                               first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "','" + birth_country + "','" + birth_city + "')")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             except pymysql.err.InternalError as e:
                 print("caught an error")
-                messages.warn(request, "Please enter a valid birthdate")
+                messages.warning(request, "Please enter a valid birthdate")
                 return HttpResponseRedirect(reverse('create_actor'))
             except pymysql.err.ProgrammingError as e:
+                print("problem")
                 messages.info(request, "Bad form data")
                 return HttpResponseRedirect(reverse('create_actor'))
             # Save the changes
@@ -277,8 +277,8 @@ def submit_create_actor(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Person()
-    messages.info(request, "Bad form data")
-    return HttpResponseRedirect(reverse('create_actor'))
+        messages.info(request, "Bad form data")
+        return HttpResponseRedirect(reverse('create_actor'))
 
 
 def crews(request):
@@ -499,7 +499,7 @@ def submit_create_crew(request):
                 return HttpResponseRedirect(reverse('error'))
             except pymysql.err.InternalError as e:
                 print("caught an error")
-                messages.warn(request, "Please enter a valid birthdate")
+                messages.warning(request, "Please enter a valid birthdate")
                 return HttpResponseRedirect(reverse('create_crew'))
             except pymysql.err.ProgrammingError as e:
                 messages.info(request, "Bad form data")
@@ -1324,7 +1324,7 @@ def submit_login(request):
                 # return response
                 return response
 
-    messages.warning(request, "Wrong username or password")
+    messages.warninging(request, "Wrong username or password")
     return HttpResponseRedirect(reverse('login'))
 
 
