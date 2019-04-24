@@ -204,11 +204,7 @@ def update_actor(request, pk):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
-            except pymysql.err.InternalError as e:
-                print("caught an error")
-                messages.warning(request, "Error")
-                return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
-            except pymysql.err.ProgrammingError as e:
+            except pymysql.err as e:
                 print("problem")
                 messages.info(request, "Bad form data")
                 return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
@@ -218,7 +214,7 @@ def update_actor(request, pk):
             # disconnect from server
             db.close()
 
-            return HttpResponseRedirect(reverse('home'), {"login": user})
+            return HttpResponseRedirect(reverse('actors'), {"login": user})
         else:
             print("form is false")
             return HttpResponseRedirect(reverse('edit_actor', args=[pk]), {"login": user})
@@ -271,11 +267,7 @@ def submit_create_actor(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
-            except pymysql.err.InternalError as e:
-                print("caught an error")
-                messages.warning(request, "Please enter a valid birthdate")
-                return HttpResponseRedirect(reverse('create_actor'))
-            except pymysql.err.ProgrammingError as e:
+            except pymysql.err as e:
                 print("problem")
                 messages.info(request, "Bad form data")
                 return HttpResponseRedirect(reverse('create_actor'))
@@ -1000,10 +992,6 @@ def update_media(request, pk):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
-            except pymysql.err.InternalError as e:
-                print("caught an error")
-                messages.warning(request, "Error")
-                return HttpResponseRedirect(reverse('edit_media', args=[pk]))
             except pymysql.err.ProgrammingError as e:
                 print("problem")
                 messages.info(request, "Bad form data")
@@ -1949,16 +1937,10 @@ def submit_create_reference(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
-            except pymysql.err.InternalError as e:
-                print("caught an error")
-                messages.warning(request, "Error")
-                return HttpResponseRedirect(reverse('create_reference'))
             except pymysql.err.ProgrammingError as e:
-                print("problem")
                 messages.info(request, "Bad form data")
                 return HttpResponseRedirect(reverse('create_reference'))
 
-            
             # Save the changes
             db.commit()
 
@@ -2037,6 +2019,52 @@ def edit_reference(request, pk):
     return render(request, 'edit-reference.block.html', {"login": user, "media": media, "reference": reference})
 
 
+def update_reference(request, pk):
+    if request.method == 'POST':
+
+        form = Reference(request.POST)
+        if form.is_valid():
+
+            referencer = form.cleaned_data['referencer']
+            referencee = form.cleaned_data['referencee']
+            location = form.cleaned_data['location']
+            description = form.cleaned_data['description']
+
+            pk = escape(pk)
+
+            # Update the DB
+            global db_user
+
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 db_user, "ib5pW8ZR", "ceb4aq")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Insert
+            try:
+                cursor.execute("UPDATE Refers SET ReferencerID = '" +
+                               referencer + "', ReferenceeID = '" + referencee + "', Location = '" + location + "', Description = '" + description + "' WHERE ReferenceID = " + pk)
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                messages.error(request, "Permisson denied")
+                return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.ProgrammingError as e:
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_reference', args=[pk]))
+
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('references'))
+            # print("form is false")
+    messages.info(request, "Bad form data")
+    return HttpResponseRedirect(reverse('edit_reference', args=[pk]))
+
+
 def delete_reference(request, pk):
     user = request.COOKIES.get('user')
     if(not user):
@@ -2070,6 +2098,7 @@ def delete_reference(request, pk):
 
     return HttpResponseRedirect(reverse('references'))
 
+
 def export_media(request):
     user = request.COOKIES.get('user')
     if(not user):
@@ -2088,11 +2117,13 @@ def export_media(request):
     response['Content-Disposition'] = 'attachment; filename="media.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['MediaID','MediaName','Year','Type','Genre','Description','MPAA Rating','Critic Rating'])
+    writer.writerow(['MediaID', 'MediaName', 'Year', 'Type',
+                     'Genre', 'Description', 'MPAA Rating', 'Critic Rating'])
     for row in media_data:
         writer.writerow(row)
 
     return response
+
 
 def export_actors(request):
     user = request.COOKIES.get('user')
@@ -2112,11 +2143,13 @@ def export_actors(request):
     response['Content-Disposition'] = 'attachment; filename="actors.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['ActorID','FirstN','MiddleN','LastN','Date Of Birth','Gender','Birth Country','Birth City'])
+    writer.writerow(['ActorID', 'FirstN', 'MiddleN', 'LastN',
+                     'Date Of Birth', 'Gender', 'Birth Country', 'Birth City'])
     for row in media_data:
         writer.writerow(row)
 
     return response
+
 
 def export_crews(request):
     user = request.COOKIES.get('user')
@@ -2136,11 +2169,13 @@ def export_crews(request):
     response['Content-Disposition'] = 'attachment; filename="crews.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['CrewID','FirstN','MiddleN','LastN','Date of Birth','Crew Type'])
+    writer.writerow(['CrewID', 'FirstN', 'MiddleN',
+                     'LastN', 'Date of Birth', 'Crew Type'])
     for row in media_data:
         writer.writerow(row)
 
     return response
+
 
 def export_meme(request):
     user = request.COOKIES.get('user')
@@ -2160,11 +2195,12 @@ def export_meme(request):
     response['Content-Disposition'] = 'attachment; filename="memes.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['MemeID','Genre','Format','Description'])
+    writer.writerow(['MemeID', 'Genre', 'Format', 'Description'])
     for row in media_data:
         writer.writerow(row)
 
     return response
+
 
 def export_review(request):
     user = request.COOKIES.get('user')
@@ -2184,11 +2220,12 @@ def export_review(request):
     response['Content-Disposition'] = 'attachment; filename="reviews.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['ReviewID','MediaID','Rating','Description'])
+    writer.writerow(['ReviewID', 'MediaID', 'Rating', 'Description'])
     for row in media_data:
         writer.writerow(row)
 
     return response
+
 
 def export_refs(request):
     user = request.COOKIES.get('user')
@@ -2208,7 +2245,8 @@ def export_refs(request):
     response['Content-Disposition'] = 'attachment; filename="references.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['ReferenceID','ReferencerID','ReferenceeID','Description'])
+    writer.writerow(['ReferenceID', 'ReferencerID',
+                     'ReferenceeID', 'Description'])
     for row in media_data:
         writer.writerow(row)
 
