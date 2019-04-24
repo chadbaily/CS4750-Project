@@ -1,2 +1,3 @@
 requests
+mod_wsgi
 PyMySQL
