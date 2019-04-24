@@ -6,11 +6,10 @@ class Person(forms.Form):
     middle_name = forms.CharField(
         label='Middle name', max_length=100, required=False)
     last_name = forms.CharField(label='Last name', max_length=100)
-    gender = forms.CharField(label='Gender', max_length=6)
+    gender = forms.CharField(label='Gender', max_length=100)
     dob = forms.CharField(label='Date of Birth', max_length=10)
-    birth_country = forms.CharField(label='Country', max_length=50)
-    birth_city = forms.CharField(label='City', max_length=50)
-
+    birth_country = forms.CharField(label='Birth Country', max_length=100)
+    birth_city = forms.CharField(label='Birth City', max_length=100)
 
 class Crew(forms.Form):
     first_name = forms.CharField(label='First name', max_length=100)
