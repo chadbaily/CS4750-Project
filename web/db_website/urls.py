@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.media, name='home'),
+    url(r'^error/$', views.error, name='error'),
 
     # Actors
     url(r'^actors/edit/(?P<pk>[0-9]+)/submit/',
