@@ -1381,7 +1381,7 @@ def submit_login(request):
                 # return response
                 return response
 
-    messages.warninging(request, "Wrong username or password")
+    messages.warning(request, "Wrong username or password")
     return HttpResponseRedirect(reverse('login'))
 
 
