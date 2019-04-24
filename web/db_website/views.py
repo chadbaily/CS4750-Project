@@ -1794,3 +1794,100 @@ def submit_create_reference(request):
             db.close()
 
             return HttpResponseRedirect(reverse('references'))
+
+
+def edit_reference(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    if pk is None:
+        return
+
+    # ensure the pk is safe
+    pk = escape(pk)
+
+    # Open database connection
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the meme
+    try:
+        cursor.execute("SELECT * FROM Media")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    media = []
+    for row in data:
+        data = {
+            "pk": str(row[0]),
+            "media_name": str(row[1]) + "(" + str(row[2]) + ")"
+        }
+        media.append(data)
+
+    # Prepare to interact with the DB
+    ref_cursor = db.cursor()
+
+    # Get all the meme
+    try:
+        ref_cursor.execute("SELECT * FROM Refers WHERE ReferenceID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    data = ref_cursor.fetchall()
+
+
+    row = data[0]
+    reference = {
+        "pk": str(row[0]),
+        "referencerID": str(row[1]),
+        "referenceeID": str(row[2]),
+        "location": str(row[3]),
+        "description": str(row[4])
+    }
+
+    return render(request, 'edit-reference.block.html', {"login": user, "media": media, "reference": reference})
+
+def delete_reference(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Refers WHERE ReferenceID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('references'))

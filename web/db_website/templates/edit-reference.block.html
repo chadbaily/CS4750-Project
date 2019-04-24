@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {% block title %}Edit Reference{% endblock %} {% block content%}
+
+<h1>Edit Reference</h1>
+
+<div class="col-md-6">
+  <form form action="submit/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="genre">Referencer</label>
+      <select
+        class="custom-select"
+        id="referencer"
+        name="referencer"
+        value="{{ reference.referencerID }}"
+      >
+        <option selected>Referencer</option>
+        {% for item in media %}
+        <option value="{{ item.pk }}">{{ item.media_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="genre">Referencee</label>
+      <select
+        class="custom-select"
+        id="referencee"
+        name="referencee"
+        value="{{ reference.referenceeID }}"
+      >
+        <option selected>Referencee</option>
+        {% for item in media %}
+        <option value="{{ item.pk }}">{{ item.media_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="location">Location</label>
+      <input
+        type="text"
+        class="form-control"
+        id="location"
+        aria-describedby="locationHelp"
+        placeholder="35min in"
+        name="location"
+        value="{{ reference.location }}"
+      />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        type="text"
+        class="form-control"
+        id="description"
+        aria-describedby="descriptionHelp"
+        placeholder="When Stan Lee."
+        name="description"
+        >{{ reference.description }}</textarea
+      >
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/references/delete/{{ reference.pk }}/" class="btn btn-danger right-button"
+      >Delete</a
+    >
+  </form>
+</div>
+
+{% endblock %}

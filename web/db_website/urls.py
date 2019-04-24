@@ -74,6 +74,8 @@ urlpatterns = [
     url(r'^review/$', views.review, name='review'),
 
     # Refs
+    url(r'^references/edit/(?P<pk>[0-9]+)/$', views.edit_reference, name='edit_reference'),
+    url(r'^references/delete/(?P<pk>[0-9]+)/$', views.delete_reference, name='delete_reference'),
     url(r'^references/create/submit/$', views.submit_create_reference, name='submit_create_reference'),
     url(r'^references/create/$', views.create_reference, name='create_reference'),
     url(r'^references/$', views.refs, name='references'),
