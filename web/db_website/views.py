@@ -255,6 +255,13 @@ def submit_create_actor(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warn(request, "Please enter a valid birthdate")
+                return HttpResponseRedirect(reverse('create_actor'))
+            except pymysql.err.ProgrammingError as e:
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('create_actor'))
             # Save the changes
             db.commit()
 
@@ -485,10 +492,17 @@ def submit_create_crew(request):
             try:
                 cursor.execute("INSERT INTO Crew (FirstN, MiddleN, LastN, DOB, Type) VALUES ('" +
                                first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + ctype + "')")
-            except pymysql.err.OperationalError as e:
+            except pymysql.err.OperationalError or pymysql.err.ProgrammingError or pymysql.err.InternalError as e:
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warn(request, "Please enter a valid birthdate")
+                return HttpResponseRedirect(reverse('create_crew'))
+            except pymysql.err.ProgrammingError as e:
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('create_crew'))
             # Save the changes
             db.commit()
 
@@ -1013,6 +1027,9 @@ def submit_create_media(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.ProgrammingError as e:
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('create_media'))
             # Save the changes
             db.commit()
 
@@ -1237,6 +1254,9 @@ def submit_create_meme(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.ProgrammingError as e:
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('create_meme'))
             # Save the changes
             db.commit()
 
@@ -1302,7 +1322,7 @@ def submit_login(request):
                 # response.delete_cookie("auth")
                 # return response
                 return response
-            
+
     messages.warning(request, "Wrong username or password")
     return HttpResponseRedirect(reverse('login'))
 
@@ -1391,6 +1411,9 @@ def submit_review(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.ProgrammingError as e:
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('create_review'))
             # Save the changes
             db.commit()
 
@@ -1805,6 +1828,9 @@ def create_reference(request):
         print("caught an error")
         messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
+    except pymysql.err.ProgrammingError as e:
+        messages.info(request, "Bad form data")
+        return HttpResponseRedirect(reverse('create_actor'))
 
     # Fetch all rows
     data = cursor.fetchall()
