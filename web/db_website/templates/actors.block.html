@@ -7,12 +7,19 @@
 </p>
 
 <div class="row">
+  <input
+    type="text"
+    placeholder="Search.."
+    name="search"
+    id="search"
+    onkeyup="filterMedia()"
+  />
   <a class="btn btn-primary btn-lg btn-block" href="/actors/create"
     ><i class="fa fa-plus"></i> Add Actor</a
   >
   <div class="row">
     {% for actor in actors %}
-    <div class="card col-md-4 card-space">
+    <div class="card card-space">
       <div class="card-body">
         <a href="/actors/info/{{ actor.pk }}">
           <h5 class="card-title">{{ actor.name }}</h5>
@@ -26,6 +33,29 @@
     </div>
     {% endfor %}
   </div>
+
+  <script>
+    function filterMedia() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById('search');
+      filter = input.value.toUpperCase();
+      card = document.getElementsByClassName('card card-space');
+
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < card.length; i++) {
+        td = card[i].getElementsByTagName('h5')[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            card[i].style.display = '';
+          } else {
+            card[i].style.display = 'none';
+          }
+        }
+      }
+    }
+  </script>
 
   {% endblock %}
 </div>
