@@ -7,33 +7,26 @@
 </p>
 
 <div class="row">
-  <div class="row">
-    <div class="card col-md-4 card-space">
-      <a href="/review/create">
-        <div class="card-block text-center">
-          <h2><i class="fa fa-plus fa-3x"></i></h2>
-          <h4 class="card-title">Add Review</h4>
-        </div>
-      </a>
-    </div>
-    {% for review in reviews %}
-    <div class="card col-md-4 card-space">
-      <div class="card-body">
-        <h5 class="card-title">Review on {{ review.media_name }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Review</h6>
-        <!-- <p class="card-text">Birthdate: {{ media.birthdate }}</p> -->
-        <p class="card-text">Format: {{ review.rating }}</p>
-        <p class="card-text">Description: {{ review.description }}</p>
-        <a href="/review/edit/{{ review.pk }}/" class="card-link">Edit</a>
-        <!-- <a
+  <a class="btn btn-primary btn-lg btn-block" href="/review/create"
+    ><i class="fa fa-plus"></i> Add Review</a
+  >
+  {% for review in reviews %}
+  <div class="card card-space">
+    <div class="card-body">
+      <h5 class="card-title">Review on {{ review.media_name }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Review</h6>
+      <!-- <p class="card-text">Birthdate: {{ media.birthdate }}</p> -->
+      <p class="card-text">Format: {{ review.rating }}</p>
+      <p class="card-text">Description: {{ review.description }}</p>
+      <a href="/review/edit/{{ review.pk }}/" class="card-link">Edit</a>
+      <!-- <a
           href="review/delete/{{ review.pk }}/"
           class="btn btn-danger right-button"
           >Delete</a
         > -->
-      </div>
     </div>
-    {% endfor %}
   </div>
-
-  {% endblock %}
+  {% endfor %}
 </div>
+
+{% endblock %}

@@ -7,28 +7,23 @@
 </p>
 
 <div class="row">
-  <div class="row">
-    <div class="card col-md-4 card-space">
-      <a href="/crews/create">
-        <div class="card-block text-center">
-          <h2><i class="fa fa-plus fa-3x"></i></h2>
-          <h4 class="card-title">Add Crew</h4>
-        </div>
-      </a>
+  <a class="btn btn-primary btn-lg btn-block" href="/crews/create"
+    ><i class="fa fa-plus"></i> Add Crew</a
+  >
+  {% for crew in crews %}
+  <div class="card col-md-4 card-space">
+    <div class="card-body">
+      <a href="/crews/info/{{ crew.pk }}/"
+        ><h5 class="card-title">{{ crew.name }}</h5></a
+      >
+      <h6 class="card-subtitle mb-2 text-muted">crew</h6>
+      <!-- <p class="card-text">Birthdate: {{ crew.birthdate }}</p> -->
+      <p class="card-text">Type: {{ crew.ctype }}</p>
+      <!-- <a href="food/{{ food.pk }}/" class="btn btn-primary">Learn More</a> -->
+      <a href="/crews/edit/{{ crew.pk }}/" class="card-link">Edit</a>
     </div>
-    {% for crew in crews %}
-    <div class="card col-md-4 card-space">
-      <div class="card-body">
-        <a href="/crews/info/{{crew.pk}}/"><h5 class="card-title">{{ crew.name }}</h5></a>
-        <h6 class="card-subtitle mb-2 text-muted">crew</h6>
-        <!-- <p class="card-text">Birthdate: {{ crew.birthdate }}</p> -->
-        <p class="card-text">Type: {{ crew.ctype }}</p>
-        <!-- <a href="food/{{ food.pk }}/" class="btn btn-primary">Learn More</a> -->
-        <a href="/crews/edit/{{ crew.pk }}/" class="card-link">Edit</a>
-      </div>
-    </div>
-    {% endfor %}
   </div>
-
-  {% endblock %}
+  {% endfor %}
 </div>
+
+{% endblock %}

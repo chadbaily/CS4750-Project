@@ -6,6 +6,14 @@
   <dt class="col-sm-3">Media Type</dt>
   <dd class="col-sm-9">{{ media.mtype }}</dd>
 
+  <dt class="col-sm-3">Rating</dt>
+  <dd class="col-sm-9">
+    <p>{{ media.rating }}</p>
+  </dd>
+  <dt class="col-sm-3">Genre</dt>
+  <dd class="col-sm-9">
+    <p>{{ media.genre }}</p>
+  </dd>
   <dt class="col-sm-3">Description</dt>
   <dd class="col-sm-9">
     <p>{{ media.description }}</p>
@@ -47,7 +55,7 @@
 <h3>Memes:</h3>
 <div class="row">
   {% for meme in memes %}
-  <div class="card col-md-4 card-space">
+  <div class="card card-space">
       <div class="card-body">
         <h5 class="card-title">{{ meme.genre }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">Meme</h6>
@@ -89,7 +97,7 @@
 <h3>Reviews:</h3>
 <div class="row">
   {% for review in reviews %}
-  <div class="card col-md-4 card-space">
+  <div class="card card-space">
     <div class="card-body">
       <h5 class="card-title">Review</h5>
       <h6 class="card-subtitle mb-2 text-muted">Rating: {{ review.rating }}</h6>

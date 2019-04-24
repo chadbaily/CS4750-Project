@@ -7,17 +7,12 @@
 </p>
 
 <div class="row">
+  <a class="btn btn-primary btn-lg btn-block" href="/meme/create"
+    ><i class="fa fa-plus"></i> Add Meme</a
+  >
   <div class="row">
-    <div class="card col-md-4 card-space">
-      <a href="/meme/create">
-        <div class="card-block text-center">
-          <h2><i class="fa fa-plus fa-3x"></i></h2>
-          <h4 class="card-title">Add Meme</h4>
-        </div>
-      </a>
-    </div>
     {% for meme in memes %}
-    <div class="card col-md-4 card-space">
+    <div class="card card-space">
       <div class="card-body">
         <h5 class="card-title">{{ meme.genre }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">Meme</h6>

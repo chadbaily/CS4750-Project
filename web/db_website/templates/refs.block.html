@@ -6,16 +6,10 @@
   Here you can find some of our references!
 </p>
 
-<div class="row">
   <div class="row">
-    <div class="card col-md-4 card-space">
-      <a href="/references/create/">
-        <div class="card-block text-center">
-          <h2><i class="fa fa-plus fa-3x"></i></h2>
-          <h4 class="card-title">Add Reference</h4>
-        </div>
-      </a>
-    </div>
+      <a class="btn btn-primary btn-lg btn-block" href="/references/create"
+      ><i class="fa fa-plus"></i> Add Reference</a
+    >
     {% for reference in references %}
     <div class="card col-md-4 card-space">
       <div class="card-body">
@@ -30,4 +24,3 @@
   </div>
 
   {% endblock %}
-</div>

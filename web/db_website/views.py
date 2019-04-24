@@ -580,7 +580,9 @@ def info_media(request, pk):
             "pk": row[0],
             "media_name": str(row[1]) + " (" + str(row[2]) + ")",
             "mtype": row[3],
-            "description": row[5]
+            "genre": row[4],
+            "description": row[5],
+            "rating": row[6]
         }
 
     # Get all the actors references
@@ -1848,7 +1850,6 @@ def edit_reference(request, pk):
 
     data = ref_cursor.fetchall()
 
-
     row = data[0]
     reference = {
         "pk": str(row[0]),
@@ -1859,6 +1860,7 @@ def edit_reference(request, pk):
     }
 
     return render(request, 'edit-reference.block.html', {"login": user, "media": media, "reference": reference})
+
 
 def delete_reference(request, pk):
     user = request.COOKIES.get('user')
