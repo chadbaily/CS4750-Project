@@ -62,5 +62,6 @@ urlpatterns = [
     url(r'^review/$', views.review, name='review'),
 
     # Refs
-    url(r'^refs/$',views.refs, name='refs'),
+    url(r'^references/create/$',views.creat_reference, name='create_reference'),
+    url(r'^references/$',views.refs, name='refs'),
 ]
