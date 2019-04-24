@@ -3,11 +3,11 @@
 <h1>Create Review Page:</h1>
 
 <p>
-	Fill in the info below to add a new review 
+  Fill in the info below to add a new review
 </p>
 
 <div class="col-md-6">
-<form form action="submit/" method="post">
+  <form form action="submit/" method="post">
     {% csrf_token %}
     <div class="form-group">
       <label for="user_name">Enter Media ID</label>
@@ -16,7 +16,8 @@
         class="form-control"
         id="media_id"
         aria-describedby="media_idHelp"
-        placeholder="1",
+        placeholder="1"
+        ,
         name="media_id"
       />
     </div>
@@ -33,22 +34,17 @@
     </div>
     <div class="form-group">
       <label for="middle_name">Enter Description</label>
-      <input
+      <textarea
         type="text"
         class="form-control"
         id="description"
         aria-describedby="descriptionHelp"
         placeholder="What are your thoughts?"
         name="description"
-      />
+      ></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
+  </form>
 </div>
 
 {% endblock %}
-
-
-
-

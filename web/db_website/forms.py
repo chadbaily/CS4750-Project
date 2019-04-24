@@ -26,7 +26,8 @@ class Media(forms.Form):
     year = forms.CharField(label='Year', max_length=100)
     mtype = forms.CharField(label='type', max_length=100)
     genre = forms.CharField(label='genre', max_length=100)
-    description = forms.CharField(label='description', max_length=100)
+    description = forms.CharField(
+        label='description', max_length=1000, widget=forms.Textarea)
     mpaa_rating = forms.CharField(label='rating', max_length=100)
     crit_rating = forms.CharField(label='crit rating', max_length=100)
 
@@ -34,7 +35,7 @@ class Media(forms.Form):
 class Meme(forms.Form):
     genre = forms.CharField(label='genre', max_length=100)
     description = forms.CharField(
-        label='description', max_length=500, widget=forms.Textarea)
+        label='description', max_length=1000, widget=forms.Textarea)
     meme_format = forms.CharField(label='format', max_length=100)
 
 
@@ -46,4 +47,5 @@ class Login(forms.Form):
 class Review(forms.Form):
     media_id = forms.CharField(label='meda_id', max_length=100)
     rating = forms.CharField(label='review_name', max_length=100)
-    description = forms.CharField(label='description', max_length=1000)
+    description = forms.CharField(
+        label='description', max_length=1000, widget=forms.Textarea)

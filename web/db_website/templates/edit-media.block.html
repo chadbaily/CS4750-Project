@@ -14,7 +14,7 @@
         aria-describedby="media_nameHelp"
         placeholder="Doe"
         name="media_name"
-        value="{{media.media_name}}"
+        value="{{ media.media_name }}"
       />
     </div>
     <div class="form-group">
@@ -25,12 +25,18 @@
         id="year"
         name="year"
         placeholder="1969"
-        value="{{media.year}}"
+        value="{{ media.year }}"
       />
     </div>
     <div class="form-group">
       <label for="mtype">Media Type</label>
-      <input type="text" class="form-control" id="mtype" name="mtype" value="{{media.mtype}}" />
+      <input
+        type="text"
+        class="form-control"
+        id="mtype"
+        name="mtype"
+        value="{{ media.mtype }}"
+      />
     </div>
     <div class="form-group">
       <label for="Genre">Genre</label>
@@ -41,24 +47,29 @@
         aria-describedby="genreHelp"
         placeholder="Drama"
         name="genre"
-        value="{{media.genre}}"
+        value="{{ media.genre }}"
       />
     </div>
     <div class="form-group">
       <label for="Description">Description</label>
-      <input
+      <textarea
         type="text"
         class="form-control"
         id="description"
         aria-describedby="descriptionHelp"
         placeholder="Doe"
         name="description"
-        value="{{media.description}}"
-      />
+        >{{ media.description }}</textarea
+      >
     </div>
     <div class="form-group">
       <label for="media_name">MPAA Rating:</label>
-      <select class="form-control" id="mpaa_rating" name="mpaa_rating" value="{{media.rating}}">
+      <select
+        class="form-control"
+        id="mpaa_rating"
+        name="mpaa_rating"
+        value="{{ media.rating }}"
+      >
         <option value="Unrated"> Unrated </option>
         <option value="NC-17"> NC-17 </option>
         <option value="R"> R </option>
@@ -76,7 +87,7 @@
         aria-describedby="crit_ratingHelp"
         placeholder="Doe"
         name="crit_rating"
-        value="{{media.critic_rating}}"
+        value="{{ media.critic_rating }}"
       />
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>

@@ -65,6 +65,8 @@ urlpatterns = [
         views.update_review, name='update_review'),
     url(r'^review/edit/(?P<pk>[0-9]+)/$',
         views.edit_review, name='edit_review'),
+    url(r'^review/delete/(?P<pk>[0-9]+)/$',
+        views.delete_review, name='delete_review'),
     url(r'^review/create/submit/$', views.submit_review,
         name='submit_review'),
     url(r'^review/create/$', views.create_review, name='create_review'),

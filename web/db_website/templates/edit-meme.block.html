@@ -38,9 +38,8 @@
         aria-describedby="descriptionHelp"
         placeholder="This meme..."
         name="description"
+        >{{ meme.description }}</textarea
       >
-      {{ meme.description }}
-      </textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
     <a href="/meme/delete/{{ meme.pk }}/" class="btn btn-danger right-button"

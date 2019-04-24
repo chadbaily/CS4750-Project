@@ -1334,9 +1334,71 @@ def edit_review(request, pk):
         response.delete_cookie("user")
         return response
     if pk is None:
-        return
+        return HttpResponseRedirect(reverse('home'))
 
-    return render(request, 'edit-review.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Review WHERE ReviewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    review = {
+        "pk": row[0],
+        "mediaID": str(row[1]),
+        "rating": str(row[2]),
+        "description": str(row[3])
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-review.block.html', {"login": user, "review": review})
+
+
+def delete_review(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Review WHERE ReviewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('review'))
 
 
 def create_review(request):
