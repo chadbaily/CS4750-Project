@@ -8,6 +8,8 @@ class Person(forms.Form):
     last_name = forms.CharField(label='Last name', max_length=100)
     gender = forms.CharField(label='Gender', max_length=6)
     dob = forms.CharField(label='Date of Birth', max_length=10)
+    birth_country = forms.CharField(label='Country', max_length=50)
+    birth_city = forms.CharField(label='City', max_length=50)
 
 
 class Crew(forms.Form):

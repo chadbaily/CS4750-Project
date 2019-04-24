@@ -24,8 +24,12 @@
         <!-- <p class="card-text">Birthdate: {{ media.birthdate }}</p> -->
         <p class="card-text">Format: {{ review.rating }}</p>
         <p class="card-text">Description: {{ review.description }}</p>
-        <!-- <a href="food/{{ food.pk }}/" class="btn btn-primary">Learn More</a> -->
         <a href="/review/edit/{{ review.pk }}/" class="card-link">Edit</a>
+        <!-- <a
+          href="review/delete/{{ review.pk }}/"
+          class="btn btn-danger right-button"
+          >Delete</a
+        > -->
       </div>
     </div>
     {% endfor %}

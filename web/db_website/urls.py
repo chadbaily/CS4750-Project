@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^actors/create/$', views.create_actor, name='create_actor'),
     url(r'^actors/info/(?P<pk>[0-9]+)/$', views.info_actor, name='info_actor'),
     url(r'^actors/$', views.actors, name='actors'),
+    url(r'^actors/delete/(?P<pk>[0-9]+)/$',
+        views.delete_actor, name='delete_actor'),
 
     # Crew
     url(r'^crews/edit/(?P<pk>[0-9]+)/submit/',
@@ -45,7 +47,7 @@ urlpatterns = [
         name='submit_create_meme'),
     url(r'^meme/create/$', views.create_meme, name='create_meme'),
     url(r'^meme/$', views.meme, name='meme'),
-    
+
     # Login
     url(r'^login/submit/$', views.submit_login, name='submit_login'),
     url(r'^login/$', views.login, name='login'),
@@ -56,7 +58,8 @@ urlpatterns = [
     # Review
     url(r'^review/edit/(?P<pk>[0-9]+)/submit/$',
         views.update_review, name='update_review'),
-    url(r'^review/edit/(?P<pk>[0-9]+)/$', views.edit_review, name='edit_review'),
+    url(r'^review/edit/(?P<pk>[0-9]+)/$',
+        views.edit_review, name='edit_review'),
     url(r'^review/create/submit/$', views.submit_review,
         name='submit_review'),
     url(r'^review/create/$', views.create_review, name='create_review'),

@@ -75,9 +75,75 @@ def edit_actors(request, pk):
         return response
 
     if pk is None:
-        return
+        return HttpResponseRedirect(reverse('home'))
 
-    return render(request, 'edit-actor.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    actor = {
+        "pk": row[0],
+        "first_name": str(row[1]),
+        "middle_name": str(row[2]),
+        "last_name": str(row[3]),
+        "DOB": str(row[4]),
+        "gender": str(row[5]),
+        "birth_country": str(row[6]),
+        "birth_city": str(row[7]),
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-actor.block.html', {"login": user, "actor": actor})
+
+
+def delete_actor(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Actor WHERE ActorID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('actors'))
 
 
 def update_actor(request, pk):
@@ -99,6 +165,8 @@ def update_actor(request, pk):
             middle_name = form.cleaned_data['middle_name']
             gender = form.cleaned_data['gender']
             dob = form.cleaned_data['dob']
+            birth_country = form.cleaned_data['birth_country']
+            birth_city = form.cleaned_data['birth_city']
 
             # ensure the pk is safe
             pk = escape(pk)
@@ -118,7 +186,7 @@ def update_actor(request, pk):
             # Update
             try:
                 cursor.execute("UPDATE Actor SET FirstN = '" + first_name + "', MiddleN = '" + middle_name + "', LastN = '" +
-                               last_name + "', Gender = '" + gender + "', DOB = '" + dob + "' WHERE ActorID = " + pk)
+                               last_name + "', Gender = '" + gender + "', DOB = '" + dob + "', BirthCountry = '" + birth_country + "', BirthCity = '" + birth_city + "' WHERE ActorID = " + pk)
             except pymysql.err.OperationalError as e:
                 print("caught an error")
                 return HttpResponseRedirect(reverse('error'))
@@ -162,6 +230,8 @@ def submit_create_actor(request):
             middle_name = form.cleaned_data['middle_name']
             gender = form.cleaned_data['gender']
             dob = form.cleaned_data['dob']
+            birth_country = form.cleaned_data['birth_country']
+            birth_city = form.cleaned_data['birth_city']
 
             # Update the DB
             global db_user
@@ -174,8 +244,8 @@ def submit_create_actor(request):
 
             # Insert
             try:
-                cursor.execute("INSERT INTO Actor (FirstN, MiddleN, LastN, DOB, Gender) VALUES ('" +
-                               first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "')")
+                cursor.execute("INSERT INTO Actor (FirstN, MiddleN, LastN, DOB, Gender, BirthCountry, BirthCity) VALUES ('" +
+                               first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "','" + birth_country + "','" + birth_city + ")")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
                 return HttpResponseRedirect(reverse('error'))
