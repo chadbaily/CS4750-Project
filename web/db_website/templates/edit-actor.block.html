@@ -12,8 +12,9 @@
         class="form-control"
         id="first_name"
         aria-describedby="first_nameHelp"
-        placeholder="John",
+        placeholder="John"
         name="first_name"
+        value="{{actor.first_name}}"
       />
     </div>
     <div class="form-group">
@@ -25,6 +26,7 @@
         aria-describedby="middle_nameHelp"
         placeholder="Mark"
         name="middle_name"
+        value="{{actor.middle_name}}"
       />
     </div>
     <div class="form-group">
@@ -36,17 +38,52 @@
         aria-describedby="last_nameHelp"
         placeholder="Doe"
         name="last_name"
+        value="{{actor.last_name}}"
       />
     </div>
     <div class="form-group">
       <label for="gender">Gender</label>
-      <input type="text" class="form-control" id="gender" name="gender" />
+      <input type="text" class="form-control" id="gender" name="gender" value="{{actor.gender}}" />
     </div>
     <div class="form-group">
       <label for="dob">Birthday</label>
-      <input type="text" class="form-control" id="dob" name="dob" placeholder="1969-02-27"/>
+      <input
+        type="text"
+        class="form-control"
+        id="dob"
+        name="dob"
+        placeholder="1969-02-27"
+        value="{{actor.DOB}}"
+      />
+    </div>
+    <div class="form-group">
+      <label for="birth_country">Birth Country</label>
+      <input
+        type="text"
+        class="form-control"
+        id="birth_country"
+        aria-describedby="birth_countryHelp"
+        placeholder="Doe"
+        name="birth_country"
+        value="{{actor.birth_country}}"
+      />
+    </div>
+    <div class="form-group">
+      <label for="birth_city">Birth City</label>
+      <input
+        type="text"
+        class="form-control"
+        id="birth_city"
+        aria-describedby="birth_cityHelp"
+        placeholder="Doe"
+        name="birth_city"
+        value="{{actor.birth_city}}"
+      />
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/actors/delete/{{ actor.pk }}/" class="btn btn-danger right-button"
+      >Delete</a
+    >
   </form>
 </div>
 

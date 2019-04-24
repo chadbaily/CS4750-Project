@@ -43,7 +43,11 @@ def actors(request):
     cursor = db.cursor()
 
     # Get all the actors
-    cursor.execute("SELECT * FROM Actor")
+    try:
+        cursor.execute("SELECT * FROM Actor")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -71,9 +75,75 @@ def edit_actors(request, pk):
         return response
 
     if pk is None:
-        return
+        return HttpResponseRedirect(reverse('home'))
 
-    return render(request, 'edit-actor.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    actor = {
+        "pk": row[0],
+        "first_name": str(row[1]),
+        "middle_name": str(row[2]),
+        "last_name": str(row[3]),
+        "DOB": str(row[4]),
+        "gender": str(row[5]),
+        "birth_country": str(row[6]),
+        "birth_city": str(row[7]),
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-actor.block.html', {"login": user, "actor": actor})
+
+
+def delete_actor(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Actor WHERE ActorID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('actors'))
 
 
 def update_actor(request, pk):
@@ -95,6 +165,8 @@ def update_actor(request, pk):
             middle_name = form.cleaned_data['middle_name']
             gender = form.cleaned_data['gender']
             dob = form.cleaned_data['dob']
+            birth_country = form.cleaned_data['birth_country']
+            birth_city = form.cleaned_data['birth_city']
 
             # ensure the pk is safe
             pk = escape(pk)
@@ -112,8 +184,12 @@ def update_actor(request, pk):
             cursor = db.cursor()
 
             # Update
-            cursor.execute("UPDATE Actor SET FirstN = '" + first_name + "', MiddleN = '" + middle_name + "', LastN = '" +
-                           last_name + "', Gender = '" + gender + "', DOB = '" + dob + "' WHERE ActorID = " + pk)
+            try:
+                cursor.execute("UPDATE Actor SET FirstN = '" + first_name + "', MiddleN = '" + middle_name + "', LastN = '" +
+                               last_name + "', Gender = '" + gender + "', DOB = '" + dob + "', BirthCountry = '" + birth_country + "', BirthCity = '" + birth_city + "' WHERE ActorID = " + pk)
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
 
@@ -154,6 +230,8 @@ def submit_create_actor(request):
             middle_name = form.cleaned_data['middle_name']
             gender = form.cleaned_data['gender']
             dob = form.cleaned_data['dob']
+            birth_country = form.cleaned_data['birth_country']
+            birth_city = form.cleaned_data['birth_city']
 
             # Update the DB
             global db_user
@@ -165,8 +243,12 @@ def submit_create_actor(request):
             cursor = db.cursor()
 
             # Insert
-            cursor.execute("INSERT INTO Actor (FirstN, MiddleN, LastN, DOB, Gender) VALUES ('" +
-                           first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "')")
+            try:
+                cursor.execute("INSERT INTO Actor (FirstN, MiddleN, LastN, DOB, Gender, BirthCountry, BirthCity) VALUES ('" +
+                               first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "','" + birth_country + "','" + birth_city + ")")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
 
@@ -200,7 +282,11 @@ def crews(request):
     cursor = db.cursor()
 
     # Get all the Crews
-    cursor.execute("SELECT * FROM Crew")
+    try:
+        cursor.execute("SELECT * FROM Crew")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -229,8 +315,71 @@ def edit_crews(request, pk):
 
     if pk is None:
         return
+    pk = escape(pk)
 
-    return render(request, 'edit-crew.block.html', {"login": user})
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    crew = {
+        "pk": row[0],
+        "first_name": str(row[1]),
+        "middle_name": str(row[2]),
+        "last_name": str(row[3]),
+        "dob": str(row[4]),
+        "type": str(row[5]),
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-crew.block.html', {"login": user, "crew": crew})
+
+
+def delete_crew(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Crew WHERE CrewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('crews'))
 
 
 def update_crew(request, pk):
@@ -264,8 +413,13 @@ def update_crew(request, pk):
             cursor = db.cursor()
 
             # Update
-            cursor.execute("UPDATE Crew SET FirstN = '" + first_name + "', MiddleN = '" + middle_name + "', LastN = '" +
-                           last_name + "', Type = '" + ctype + "', DOB = '" + dob + "' WHERE CrewID = " + pk)
+            try:
+                cursor.execute("UPDATE Crew SET FirstN = '" + first_name + "', MiddleN = '" + middle_name + "', LastN = '" +
+                               last_name + "', Type = '" + ctype + "', DOB = '" + dob + "' WHERE CrewID = " + pk)
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
+
             # Save the changes
             db.commit()
 
@@ -317,8 +471,12 @@ def submit_create_crew(request):
             cursor = db.cursor()
 
             # Insert
-            cursor.execute("INSERT INTO Crew (FirstN, MiddleN, LastN, DOB, Type) VALUES ('" +
-                           first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + ctype + "')")
+            try:
+                cursor.execute("INSERT INTO Crew (FirstN, MiddleN, LastN, DOB, Type) VALUES ('" +
+                               first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + ctype + "')")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
 
@@ -352,7 +510,12 @@ def media(request):
     cursor = db.cursor()
 
     # Get all the media
-    cursor.execute("SELECT * FROM Media")
+    try:
+        cursor.execute("SELECT * FROM Media")
+
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -398,7 +561,11 @@ def info_media(request, pk):
     cursor = db.cursor()
 
     # Get all the media
-    cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
+    try:
+        cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -419,7 +586,11 @@ def info_media(request, pk):
     # Get all the actors references
     actors_cursor = db.cursor()
 
-    actors_cursor.execute("SELECT * FROM Actors WHERE MediaID = " + pk)
+    try:
+        actors_cursor.execute("SELECT * FROM Actors WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     actors_data = actors_cursor.fetchall()
@@ -428,8 +599,12 @@ def info_media(request, pk):
     for row in actors_data:
         # Get all the actors
         actor_cursor = db.cursor()
-        actor_cursor.execute(
-            "SELECT * FROM Actor WHERE ActorID = " + str(row[1]))
+        try:
+            actor_cursor.execute(
+                "SELECT * FROM Actor WHERE ActorID = " + str(row[1]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         actor_data = actor_cursor.fetchall()
         print(actor_data)
@@ -443,7 +618,11 @@ def info_media(request, pk):
             actors.append(actor)
 
     crews_cursor = db.cursor()
-    crews_cursor.execute("SELECT * FROM Crews WHERE MediaID = " + pk)
+    try:
+        crews_cursor.execute("SELECT * FROM Crews WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     crews_data = crews_cursor.fetchall()
@@ -452,8 +631,14 @@ def info_media(request, pk):
     for row in crews_data:
         # Get all the crews
         crew_cursor = db.cursor()
-        crew_cursor.execute(
-            "SELECT * FROM Crew WHERE CrewID = " + str(row[0]))
+
+        try:
+            crew_cursor.execute(
+                "SELECT * FROM Crew WHERE CrewID = " + str(row[0]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+
         # Fetch all rows
         crew_data = crew_cursor.fetchall()
         print(crew_data)
@@ -466,7 +651,13 @@ def info_media(request, pk):
             crews.append(crew)
 
     memes_cursor = db.cursor()
-    memes_cursor.execute("SELECT * FROM InReferenceTo WHERE MediaID = " + pk)
+
+    try:
+        memes_cursor.execute(
+            "SELECT * FROM InReferenceTo WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     memes_data = memes_cursor.fetchall()
@@ -475,8 +666,13 @@ def info_media(request, pk):
     for row in memes_data:
         # Get all the memes
         meme_cursor = db.cursor()
-        meme_cursor.execute(
-            "SELECT * FROM Memes WHERE MemeID = " + str(row[0]))
+
+        try:
+            meme_cursor.execute(
+                "SELECT * FROM Memes WHERE MemeID = " + str(row[0]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         meme_data = meme_cursor.fetchall()
         print(meme_data)
@@ -485,19 +681,18 @@ def info_media(request, pk):
                 "pk": line[0],
                 "genre": str(line[1]),
                 "format": str(line[2]),
-                "description" : str(line[3])
+                "description": str(line[3])
             }
             memes.append(meme)
-
-
-
-
-
 
     # Get all the actors references
     reviews_cursos = db.cursor()
 
-    reviews_cursos.execute("SELECT * FROM Review_On WHERE MediaID = " + pk)
+    try:
+        reviews_cursos.execute("SELECT * FROM Review_On WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     reviews_data = reviews_cursos.fetchall()
@@ -507,8 +702,12 @@ def info_media(request, pk):
     for row in reviews_data:
         # Get all the reviews
         review_cursor = db.cursor()
-        review_cursor.execute(
-            "SELECT * FROM Review WHERE ReviewID = " + str(row[0]))
+        try:
+            review_cursor.execute(
+                "SELECT * FROM Review WHERE ReviewID = " + str(row[0]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         review_data = review_cursor.fetchall()
         print(review_data)
@@ -521,7 +720,7 @@ def info_media(request, pk):
             reviews.append(review)
     # disconnect from server
     db.close()
-    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews":crews, "memes":memes, "reviews": reviews, "login": user})
+    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews": crews, "memes": memes, "reviews": reviews, "login": user})
 
 
 def edit_media(request, pk):
@@ -534,7 +733,73 @@ def edit_media(request, pk):
     if pk is None:
         return
 
-    return render(request, 'edit-media.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    media = {
+        "pk": row[0],
+        "media_name": str(row[1]),
+        "year": str(row[2]),
+        "mtype": str(row[3]),
+        "genre": str(row[4]),
+        "description": str(row[5]),
+        "rating": str(row[6]),
+        "critic_rating": str(row[7])
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-media.block.html', {"login": user, "media": media})
+
+
+def delete_media(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Media WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('media'))
 
 
 def update_media(request, pk):
@@ -570,9 +835,13 @@ def update_media(request, pk):
             cursor = db.cursor()
 
             # Update
-            cursor.execute("UPDATE Media SET MediaName = '" + media_name + "', Year = '" + year +
-                           "',Type = '" + mtype + "',Genre ='"+genre+"',Description = '"+description+"',MPAA_Rating = '" +
-                           mpaa_rating+"',Crit_Rating = '"+crit_rating+"'WHERE MediaID = " + pk)
+            try:
+                cursor.execute("UPDATE Media SET MediaName = '" + media_name + "', Year = '" + year +
+                               "',Type = '" + mtype + "',Genre ='"+genre+"',Description = '"+description+"',MPAA_Rating = '" +
+                               mpaa_rating+"',Crit_Rating = '"+crit_rating+"'WHERE MediaID = " + pk)
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
 
             # Save the changes
             db.commit()
@@ -626,8 +895,12 @@ def submit_create_media(request):
             cursor = db.cursor()
 
             # Insert
-            cursor.execute("INSERT INTO Media (MediaName,Year,Type,Genre,Description,MPAA_Rating,Crit_Rating) VALUES ('" +
-                           media_name + "','" + year + "','" + mtype + "','" + genre + "','" + description + "','" + mpaa_rating + "','" + crit_rating + "')")
+            try:
+                cursor.execute("INSERT INTO Media (MediaName,Year,Type,Genre,Description,MPAA_Rating,Crit_Rating) VALUES ('" +
+                               media_name + "','" + year + "','" + mtype + "','" + genre + "','" + description + "','" + mpaa_rating + "','" + crit_rating + "')")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
 
@@ -660,7 +933,11 @@ def meme(request):
     cursor = db.cursor()
 
     # Get all the meme
-    cursor.execute("SELECT * FROM Memes")
+    try:
+        cursor.execute("SELECT * FROM Memes")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -691,7 +968,69 @@ def edit_meme(request, pk):
     if pk is None:
         return
 
-    return render(request, 'edit-meme.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Memes WHERE  MemeID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    meme = {
+        "pk": row[0],
+        "genre": str(row[1]),
+        "format": str(row[2]),
+        "description": str(row[3])
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-meme.block.html', {"login": user, "meme": meme})
+
+
+def delete_meme(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Memes WHERE MemeID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('meme'))
 
 
 def update_meme(request, pk):
@@ -719,8 +1058,12 @@ def update_meme(request, pk):
             cursor = db.cursor()
 
             # Update
-            cursor.execute("UPDATE Memes SET Genre = '" + genre + "', Format = '" + meme_format +
-                           "', Description = '" + description + "' WHERE MemeID = " + pk)
+            try:
+                cursor.execute("UPDATE Memes SET Genre = '" + genre + "', Format = '" + meme_format +
+                               "', Description = '" + description + "' WHERE MemeID = " + pk)
+            except pymysql.err.OperationalError as e:
+                print(e)
+                return None
 
             # Save the changes
             db.commit()
@@ -771,8 +1114,12 @@ def submit_create_meme(request):
             cursor = db.cursor()
 
             # Insert
-            cursor.execute("INSERT INTO Memes (Genre,Format,Description) VALUES ('" +
-                           genre + "','" + description + "','" + meme_format + "')")
+            try:
+                cursor.execute("INSERT INTO Memes (Genre,Format,Description) VALUES ('" +
+                               genre + "','" + description + "','" + meme_format + "')")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
 
@@ -808,8 +1155,12 @@ def submit_login(request):
             cursor = db.cursor()
 
             # Get all the media
-            cursor.execute("SELECT * FROM User_Login WHERE user_name = '" +
-                           user_name+"' and password = '"+password+"'")
+            try:
+                cursor.execute("SELECT * FROM User_Login WHERE user_name = '" +
+                               user_name+"' and password = '"+password+"'")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
 
             # Fetch all rows
             data = cursor.fetchall()
@@ -856,7 +1207,11 @@ def review(request):
     cursor = db.cursor()
 
     # Get all the meme
-    cursor.execute("SELECT * FROM Review")
+    try:
+        cursor.execute("SELECT * FROM Review")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -864,8 +1219,12 @@ def review(request):
     reviews = []
     for row in data:
         mediaCursor = db.cursor()
-        mediaCursor.execute(
-            "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        try:
+            mediaCursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
         mediaData = mediaCursor.fetchall()
         # print(mediaData)
         review = {
@@ -903,8 +1262,12 @@ def submit_review(request):
             cursor = db.cursor()
 
             # Insert
-            cursor.execute("INSERT INTO Review (MediaID,Rating,Description) VALUES ('" +
-                           media_id + "','" + rating + "','" + description + "')")
+            try:
+                cursor.execute("INSERT INTO Review (MediaID,Rating,Description) VALUES ('" +
+                               media_id + "','" + rating + "','" + description + "')")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
 
@@ -939,9 +1302,13 @@ def update_review(request, pk):
             # Prepare to interact with the DB
             cursor = db.cursor()
 
-            # Update
-            cursor.execute("UPDATE Review SET MediaID = '" + media_id + "', Rating = '" + rating +
-                           "', Description = '" + description + "' WHERE ReviewID = " + pk)
+            # Updatetry:
+            try:
+                cursor.execute("UPDATE Review SET MediaID = '" + media_id + "', Rating = '" + rating +
+                               "', Description = '" + description + "' WHERE ReviewID = " + pk)
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
 
             # Save the changes
             db.commit()
@@ -967,9 +1334,71 @@ def edit_review(request, pk):
         response.delete_cookie("user")
         return response
     if pk is None:
-        return
+        return HttpResponseRedirect(reverse('home'))
 
-    return render(request, 'edit-review.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Review WHERE ReviewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    review = {
+        "pk": row[0],
+        "mediaID": str(row[1]),
+        "rating": str(row[2]),
+        "description": str(row[3])
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-review.block.html', {"login": user, "review": review})
+
+
+def delete_review(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Review WHERE ReviewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('review'))
 
 
 def create_review(request):
@@ -996,13 +1425,18 @@ def info_actor(request, pk):
     # Get the information about the media
 
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
 
     # Get all the media
-    cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
+    try:
+        cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -1018,13 +1452,17 @@ def info_actor(request, pk):
             "actor_name": str(row[1]) + " " + str(row[3]),
             "dob": row[4],
             "gender": row[5],
-            "pob" : str(row[6]) + ", " + str(row[7])
+            "pob": str(row[6]) + ", " + str(row[7])
         }
 
     # Get all the actors references
     actors_cursor = db.cursor()
 
-    actors_cursor.execute("SELECT * FROM Actors WHERE ActorID = " + pk)
+    try:
+        actors_cursor.execute("SELECT * FROM Actors WHERE ActorID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     actors_data = actors_cursor.fetchall()
@@ -1033,8 +1471,12 @@ def info_actor(request, pk):
     for row in actors_data:
         # Get all the actors
         media_cursor = db.cursor()
-        media_cursor.execute(
-            "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
+        try:
+            media_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         media_data = media_cursor.fetchall()
         print(media_data)
@@ -1051,14 +1493,14 @@ def info_actor(request, pk):
     # disconnect from server
     db.close()
 
-    return render(request, 'info-actor.block.html', {"medias": medias, "actor": actor,"login":user})
-
+    return render(request, 'info-actor.block.html', {"medias": medias, "actor": actor, "login": user})
 
 
 def logout(request):
     response = HttpResponseRedirect(reverse('login'))
     response.delete_cookie("user")
     return response
+
 
 def info_crew(request, pk):
     user = request.COOKIES.get('user')
@@ -1075,13 +1517,18 @@ def info_crew(request, pk):
     # Get the information about the media
 
     # Open database connection
-    db = pymysql.connect("mysql.cs.virginia.edu", "ceb4aq", "ib5pW8ZR", "ceb4aq")
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         "ceb4aq", "ib5pW8ZR", "ceb4aq")
 
     # Prepare to interact with the DB
     cursor = db.cursor()
 
     # Get all the media
-    cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
+    try:
+        cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -1097,13 +1544,17 @@ def info_crew(request, pk):
             "crew_name": str(row[1]) + " " + str(row[3]),
             "dob": row[4],
             "ctype": row[5],
-            
+
         }
 
     # Get all the crews references
     actors_cursor = db.cursor()
 
-    actors_cursor.execute("SELECT * FROM Crews WHERE CrewID = " + pk)
+    try:
+        actors_cursor.execute("SELECT * FROM Crews WHERE CrewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
     actors_data = actors_cursor.fetchall()
@@ -1112,8 +1563,12 @@ def info_crew(request, pk):
     for row in actors_data:
         # Get all the crews
         media_cursor = db.cursor()
-        media_cursor.execute(
-            "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
+        try:
+            media_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         media_data = media_cursor.fetchall()
         print(media_data)
@@ -1130,5 +1585,8 @@ def info_crew(request, pk):
     # disconnect from server
     db.close()
 
-    return render(request, 'info-crew.block.html', {"medias": medias, "crew": crew,"login":user})
+    return render(request, 'info-crew.block.html', {"medias": medias, "crew": crew, "login": user})
 
+
+def error(request):
+    return render(request, 'error.block.html')
