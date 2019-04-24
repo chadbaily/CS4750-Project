@@ -315,9 +315,70 @@ def edit_crews(request, pk):
 
     if pk is None:
         return
+    pk = escape(pk)
 
-    return render(request, 'edit-crew.block.html', {"login": user})
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
 
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    crew = {
+        "pk": row[0],
+        "first_name": str(row[1]),
+        "middle_name": str(row[2]),
+        "last_name": str(row[3]),
+        "dob": str(row[4]),
+        "type": str(row[5]),
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-crew.block.html', {"login": user, "crew": crew})
+
+def delete_crew(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Crew WHERE CrewID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('crews'))
 
 def update_crew(request, pk):
     # if this is a POST request we need to process the form data

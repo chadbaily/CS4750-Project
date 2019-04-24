@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^crews/edit/(?P<pk>[0-9]+)/submit/',
         views.update_crew, name='update_crew'),
     url(r'^crews/edit/(?P<pk>[0-9]+)/$', views.edit_crews, name='edit_crew'),
+    url(r'^crews/delete/(?P<pk>[0-9]+)/$', views.delete_crew, name='delete_crew'),
     url(r'^crews/create/submit/$', views.submit_create_crew,
         name='submit_create_crew'),
     url(r'^crews/create/$', views.create_crew, name='create_crew'),
