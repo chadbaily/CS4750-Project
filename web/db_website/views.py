@@ -348,6 +348,7 @@ def edit_crews(request, pk):
 
     return render(request, 'edit-crew.block.html', {"login": user, "crew": crew})
 
+
 def delete_crew(request, pk):
     user = request.COOKIES.get('user')
     if(not user):
@@ -379,6 +380,7 @@ def delete_crew(request, pk):
     db.close()
 
     return HttpResponseRedirect(reverse('crews'))
+
 
 def update_crew(request, pk):
     # if this is a POST request we need to process the form data
@@ -731,7 +733,73 @@ def edit_media(request, pk):
     if pk is None:
         return
 
-    return render(request, 'edit-media.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    media = {
+        "pk": row[0],
+        "media_name": str(row[1]),
+        "year": str(row[2]),
+        "mtype": str(row[3]),
+        "genre": str(row[4]),
+        "description": str(row[5]),
+        "rating": str(row[6]),
+        "critic_rating": str(row[7])
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-media.block.html', {"login": user, "media": media})
+
+
+def delete_media(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Media WHERE MediaID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('media'))
 
 
 def update_media(request, pk):
