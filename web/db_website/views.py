@@ -269,7 +269,7 @@ def submit_create_actor(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Person()
-
+    messages.info(request, "Bad form data")
     return HttpResponseRedirect(reverse('create_actor'))
 
 
@@ -503,7 +503,7 @@ def submit_create_crew(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Crew()
-
+    messages.info(request, "Bad form data")
     return HttpResponseRedirect(reverse('create_crew'))
 
 
@@ -1027,7 +1027,7 @@ def submit_create_media(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Media()
-
+    messages.info(request, "Bad form data")
     return HttpResponseRedirect(reverse('create_media'))
 
 
@@ -1251,7 +1251,7 @@ def submit_create_meme(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Person()
-
+    messages.info(request, "Bad form data")
     return HttpResponseRedirect(reverse('create_meme'))
 
 
@@ -1302,9 +1302,9 @@ def submit_login(request):
                 # response.delete_cookie("auth")
                 # return response
                 return response
-            else:
-                messages.warning(request, "Wrong username or password")
-                return HttpResponseRedirect(reverse('login'))
+            
+    messages.warning(request, "Wrong username or password")
+    return HttpResponseRedirect(reverse('login'))
 
 
 def login(request):
@@ -1398,6 +1398,8 @@ def submit_review(request):
             db.close()
 
             return HttpResponseRedirect(reverse('review'))
+    messages.info(request, "Bad form data")
+    return HttpResponseRedirect(reverse('create_review'))
 
 
 def update_review(request, pk):
@@ -1854,10 +1856,9 @@ def submit_create_reference(request):
             db.close()
 
             return HttpResponseRedirect(reverse('references'))
-        else:
             # print("form is false")
-            messages.info(request, "Bad form data")
-            return HttpResponseRedirect(reverse('create_reference'))
+    messages.info(request, "Bad form data")
+    return HttpResponseRedirect(reverse('create_reference'))
 
 
 def edit_reference(request, pk):
