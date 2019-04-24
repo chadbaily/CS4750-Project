@@ -489,9 +489,53 @@ def info_media(request, pk):
             }
             memes.append(meme)
 
+    ref1_cursor = db.cursor()
+    ref1_cursor.execute("SELECT * FROM Refers WHERE ReferencerID = "+pk)
 
+    data = ref1_cursor.fetchall()
+    print(data)
+    references = []
+    for row in data:
+        m11_cursor = db.cursor()
+        m11_cursor.execute("SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        m11data = m11_cursor.fetchall()
 
+        m12_cursor = db.cursor()
+        m12_cursor.execute("SELECT * FROM Media WHERE MediaID = " + str(row[2]))
+        m12data = m12_cursor.fetchall()
+        ref1 ={
+            "pk": row[0],
+            "m1pk": m11data[0][0],
+            "m1name":str(m11data[0][1]),
+            "m2pk": m12data[0][0],
+            "m2name": str(m12data[0][1]),
+            "description": row[3]
+        }
+        references.append(ref1)
 
+    ref2_cursor = db.cursor()
+    ref2_cursor.execute("SELECT * FROM Refers WHERE ReferenceeID = "+pk)
+
+    data = ref2_cursor.fetchall()
+    print(data)
+    referenced = []
+    for row in data:
+        m21_cursor = db.cursor()
+        m21_cursor.execute("SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        m21data = m21_cursor.fetchall()
+
+        m22_cursor = db.cursor()
+        m22_cursor.execute("SELECT * FROM Media WHERE MediaID = " + str(row[2]))
+        m22data = m22_cursor.fetchall()
+        ref2 ={
+            "pk": row[0],
+            "m1pk": m21data[0][0],
+            "m1name":str(m21data[0][1]),
+            "m2pk": m22data[0][0],
+            "m2name": str(m22data[0][1]),
+            "description": row[3]
+        }
+        referenced.append(ref2)
 
 
     # Get all the actors references
@@ -521,7 +565,7 @@ def info_media(request, pk):
             reviews.append(review)
     # disconnect from server
     db.close()
-    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews":crews, "memes":memes, "reviews": reviews, "login": user})
+    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews":crews, "memes":memes, "references": references, "referenced":referenced, "reviews": reviews, "login": user})
 
 
 def edit_media(request, pk):
@@ -1132,3 +1176,40 @@ def info_crew(request, pk):
 
     return render(request, 'info-crew.block.html', {"medias": medias, "crew": crew,"login":user})
 
+def refs(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    # Open database connection
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    ref_cursor = db.cursor()
+    ref_cursor.execute("SELECT * FROM Refers")
+
+    data = ref_cursor.fetchall()
+    print(data)
+    refs = []
+    for row in data:
+        m1_cursor = db.cursor()
+        m1_cursor.execute("SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        m1data = m1_cursor.fetchall()
+
+        m2_cursor = db.cursor()
+        m2_cursor.execute("SELECT * FROM Media WHERE MediaID = " + str(row[2]))
+        m2data = m2_cursor.fetchall()
+        ref ={
+            "pk": row[0],
+            "m1pk": m1data[0][0],
+            "m1name":str(m1data[0][1]),
+            "m2pk": m2data[0][0],
+            "m2name": str(m2data[0][1]),
+            "description": row[3]
+        }
+        refs.append(ref)
+    db.close()
+    return render(request,"refs.block.html",{"references":refs,"login":user})

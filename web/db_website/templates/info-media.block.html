@@ -13,7 +13,7 @@
 </dl>
 
 {% if actors|length > 0 %}
-<h3>Actors staring in {{ media.media_name }}</h3>
+<h3>Actors:</h3>
 <div class="row">
   {% for actor in actors %}
   
@@ -29,24 +29,22 @@
  
   {% endfor %}
 </div>
-{% endif %}{% if actors|length > 0 %}
-<h3>Crews working on {{ media.media_name }}</h3>
+{% endif %}{% if crews|length > 0 %}
+<h3>Crew:</h3>
 <div class="row">
   {% for crew in crews %}
-  
   <div class="card col-md-4 card-space">
-    <div class="card-body">
-      <a href = "/crews/info/{{crew.pk}}">
-        <h5 class="card-title">{{ crew.name }}</h5>
-      </a>
-      <h6 class="card-subtitle mb-2 text-muted">Crew Type: {{ crew.ctype }}</h6>
+      <div class="card-body">
+        <a href="/crews/info/{{crew.pk}}/"><h5 class="card-title">{{ crew.name }}</h5></a>
+        <h6 class="card-subtitle mb-2 text-muted">crew</h6>
+        <!-- <p class="card-text">Birthdate: {{ crew.birthdate }}</p> -->
+        <p class="card-text">Type: {{ crew.ctype }}</p>
+      </div>
     </div>
-  </div>
- 
   {% endfor %}
 </div>
 {% endif %}{% if memes|length > 0 %}
-<h3>Memes about {{ media.media_name }}</h3>
+<h3>Memes:</h3>
 <div class="row">
   {% for meme in memes %}
   <div class="card col-md-4 card-space">
@@ -61,8 +59,34 @@
     </div>
   {% endfor %}
 </div>
+{% endif %}{% if references|length > 0 %}
+<h3>References:</h3>
+<div class="row">
+  {% for reference in references %}
+  <div class="card col-md-4 card-space">
+      <div class="card-body">
+        <h5 class="card-title"> References <h6>
+        <a href="/media/info/{{reference.m2pk}}"><p class="card-text">{{ reference.m2name}}<p></a>
+        <p class="card-text"> Description: {{reference.description}}<p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}{% if referenced|length > 0 %}
+<h3>Referenced in:</h3>
+<div class="row">
+  {% for reference in referenced %}
+  <div class="card col-md-4 card-space">
+      <div class="card-body">
+        <h5 class="card-title"> Referenced <h6>
+        <a href="/media/info/{{reference.m2pk}}"><p class="card-text">{{ reference.m1name}}<p></a>
+        <p class="card-text"> Description: {{reference.description}}<p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 {% endif %} {% if reviews|length > 0 %}
-<h3>Reviews for {{ media.media_name }}</h3>
+<h3>Reviews:</h3>
 <div class="row">
   {% for review in reviews %}
   <div class="card col-md-4 card-space">
