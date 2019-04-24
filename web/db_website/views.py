@@ -94,6 +94,14 @@ def edit_actors(request, pk):
         print("caught an error")
         messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
+    except pymysql.err.InternalError as e:
+        print("caught an error")
+        messages.warning(request, "Error")
+        return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
+    except pymysql.err.ProgrammingError as e:
+        print("problem")
+        messages.info(request, "Bad form data")
+        return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -195,6 +203,14 @@ def update_actor(request, pk):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warning(request, "Error")
+                return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
+            except pymysql.err.ProgrammingError as e:
+                print("problem")
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_actor', args=[pk]))
             # Save the changes
             db.commit()
 
@@ -390,6 +406,14 @@ def delete_crew(request, pk):
         print("caught an error")
         messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
+    except pymysql.err.InternalError as e:
+        print("caught an error")
+        messages.warning(request, "Error")
+        return HttpResponseRedirect(reverse('edit_crew', args=[pk]))
+    except pymysql.err.ProgrammingError as e:
+        print("problem")
+        messages.info(request, "Bad form data")
+        return HttpResponseRedirect(reverse('edit_crew', args=[pk]))
         # Save the changes
     db.commit()
 
@@ -437,6 +461,14 @@ def update_crew(request, pk):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warning(request, "Error")
+                return HttpResponseRedirect(reverse('edit_crew', args=[pk]))
+            except pymysql.err.ProgrammingError as e:
+                print("problem")
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_crew', args=[pk]))
 
             # Save the changes
             db.commit()
@@ -967,6 +999,14 @@ def update_media(request, pk):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warning(request, "Error")
+                return HttpResponseRedirect(reverse('edit_media', args=[pk]))
+            except pymysql.err.ProgrammingError as e:
+                print("problem")
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_media', args=[pk]))
 
             # Save the changes
             db.commit()
@@ -1114,6 +1154,14 @@ def edit_meme(request, pk):
         print("caught an error")
         messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
+    except pymysql.err.InternalError as e:
+        print("caught an error")
+        messages.warning(request, "Error")
+        return HttpResponseRedirect(reverse('edit_meme', args=[pk]))
+    except pymysql.err.ProgrammingError as e:
+        print("problem")
+        messages.info(request, "Bad form data")
+        return HttpResponseRedirect(reverse('edit_meme', args=[pk]))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -1195,8 +1243,17 @@ def update_meme(request, pk):
                 cursor.execute("UPDATE Memes SET Genre = '" + genre + "', Format = '" + meme_format +
                                "', Description = '" + description + "' WHERE MemeID = " + pk)
             except pymysql.err.OperationalError as e:
-                print(e)
-                return None
+                print("caught an error")
+                messages.error(request, "Permisson denied")
+                return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warning(request, "Error")
+                return HttpResponseRedirect(reverse('edit_meme', args=[pk]))
+            except pymysql.err.ProgrammingError as e:
+                print("problem")
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_meme', args=[pk]))
 
             # Save the changes
             db.commit()
@@ -1458,6 +1515,14 @@ def update_review(request, pk):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warning(request, "Error")
+                return HttpResponseRedirect(reverse('edit_review', args=[pk]))
+            except pymysql.err.ProgrammingError as e:
+                print("problem")
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_review', args=[pk]))
 
             # Save the changes
             db.commit()
@@ -1500,6 +1565,14 @@ def edit_review(request, pk):
         print("caught an error")
         messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
+    except pymysql.err.InternalError as e:
+        print("caught an error")
+        messages.warning(request, "Error")
+        return HttpResponseRedirect(reverse('edit_review', args=[pk]))
+    except pymysql.err.ProgrammingError as e:
+        print("problem")
+        messages.info(request, "Bad form data")
+        return HttpResponseRedirect(reverse('edit_review', args=[pk]))
 
     # Fetch all rows
     data = cursor.fetchall()
@@ -1875,6 +1948,16 @@ def submit_create_reference(request):
                 print("caught an error")
                 messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
+            except pymysql.err.InternalError as e:
+                print("caught an error")
+                messages.warning(request, "Error")
+                return HttpResponseRedirect(reverse('edit_reference', args=[pk]))
+            except pymysql.err.ProgrammingError as e:
+                print("problem")
+                messages.info(request, "Bad form data")
+                return HttpResponseRedirect(reverse('edit_reference', args=[pk]))
+
+            
             # Save the changes
             db.commit()
 
