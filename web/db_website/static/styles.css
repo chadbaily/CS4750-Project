@@ -2,3 +2,7 @@
   margin: 1rem;
   /* text-align:center; */
 }
+
+.right-button {
+  float: right;
+}

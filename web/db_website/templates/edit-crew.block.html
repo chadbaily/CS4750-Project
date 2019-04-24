@@ -12,8 +12,9 @@
         class="form-control"
         id="first_name"
         aria-describedby="first_nameHelp"
-        placeholder="John",
+        placeholder="John"
         name="first_name"
+        value="{{ crew.first_name }}"
       />
     </div>
     <div class="form-group">
@@ -25,6 +26,7 @@
         aria-describedby="middle_nameHelp"
         placeholder="Mark"
         name="middle_name"
+        value="{{ crew.middle_name }}"
       />
     </div>
     <div class="form-group">
@@ -36,17 +38,34 @@
         aria-describedby="last_nameHelp"
         placeholder="Doe"
         name="last_name"
+        value="{{ crew.last_name }}"
       />
     </div>
     <div class="form-group">
       <label for="ctype">Crew Type</label>
-      <input type="text" class="form-control" id="ctype" name="ctype" />
+      <input
+        type="text"
+        class="form-control"
+        id="ctype"
+        name="ctype"
+        value="{{ crew.type }}"
+      />
     </div>
     <div class="form-group">
       <label for="dob">Birthday</label>
-      <input type="text" class="form-control" id="dob" name="dob" placeholder="1969-02-27"/>
+      <input
+        type="text"
+        class="form-control"
+        id="dob"
+        name="dob"
+        placeholder="1969-02-27"
+        value="{{ crew.dob }}"
+      />
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/crews/delete/{{ crew.pk }}/" class="btn btn-danger right-button"
+      >Delete</a
+    >
   </form>
 </div>
 

@@ -12,7 +12,8 @@
         class="form-control"
         id="first_name"
         aria-describedby="first_nameHelp"
-        placeholder="John",
+        placeholder="John"
+        ,
         name="first_name"
       />
     </div>
@@ -44,7 +45,37 @@
     </div>
     <div class="form-group">
       <label for="dob">Birthday</label>
-      <input type="text" class="form-control" id="dob" name="dob" placeholder="1969-02-27"/>
+      <input
+        type="text"
+        class="form-control"
+        id="dob"
+        name="dob"
+        placeholder="1969-02-27"
+      />
+    </div>
+    <div class="form-group">
+      <label for="birth_country">Birth Country</label>
+      <input
+        type="text"
+        class="form-control"
+        id="birth_country"
+        aria-describedby="birth_countryHelp"
+        placeholder="Doe"
+        name="birth_country"
+        value="{{ actor.birth_country }}"
+      />
+    </div>
+    <div class="form-group">
+      <label for="birth_city">Birth City</label>
+      <input
+        type="text"
+        class="form-control"
+        id="birth_city"
+        aria-describedby="birth_cityHelp"
+        placeholder="Doe"
+        name="birth_city"
+        value="{{ actor.birth_city }}"
+      />
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>

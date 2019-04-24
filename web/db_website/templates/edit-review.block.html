@@ -2,7 +2,6 @@
 
 <h1>Edit Review</h1>
 
-
 <div class="col-md-6">
   <form form action="submit/" method="post">
     {% csrf_token %}
@@ -15,6 +14,7 @@
         aria-describedby="media_idHelp"
         placeholder="Reference"
         name="media_id"
+        value="{{ review.mediaID }}"
       />
     </div>
     <div class="form-group">
@@ -26,20 +26,25 @@
         aria-describedby="ratingHelp"
         placeholder="5.0"
         name="rating"
+        value="{{ review.rating }}"
       />
     </div>
     <div class="form-group">
       <label for="description">Description</label>
-      <input
+      <textarea
         type="text"
         class="form-control"
         id="description"
         aria-describedby="descriptionHelp"
         placeholder="This review..."
         name="description"
-      />
+        >{{ review.description }}</textarea
+      >
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/review/delete/{{ review.pk }}/" class="btn btn-danger right-button"
+      >Delete</a
+    >
   </form>
 </div>
 
