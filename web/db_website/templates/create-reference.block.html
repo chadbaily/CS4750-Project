@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block title %}Create Reference{% endblock %} {% block content%}
+
+<h1>Create Reference</h1>
+
+<div class="col-md-6">
+  <form form action="submit/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="genre">Referencer</label>
+      <select class="custom-select" id="referencer" name="referencer">
+        <option selected>Referencer</option>
+        {% for item in media %}
+        <option value="{{ item.pk }}">{{ item.media_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="genre">Referencee</label>
+      <select class="custom-select" id="referencee" name="referencee">
+        <option selected>Referencee</option>
+        {% for item in media %}
+        <option value="{{ item.pk }}">{{ item.media_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="location">Location</label>
+      <input
+        type="text"
+        class="form-control"
+        id="location"
+        aria-describedby="locationHelp"
+        placeholder="35min in"
+        name="location"
+      />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        type="text"
+        class="form-control"
+        id="description"
+        aria-describedby="descriptionHelp"
+        placeholder="When Stan Lee."
+        name="description"
+      ></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -685,6 +685,83 @@ def info_media(request, pk):
             }
             memes.append(meme)
 
+    ref1_cursor = db.cursor()
+    try:
+        ref1_cursor.execute("SELECT * FROM Refers WHERE ReferencerID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    data = ref1_cursor.fetchall()
+    print(data)
+    references = []
+    for row in data:
+        m11_cursor = db.cursor()
+        try:
+            m11_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+
+        m11data = m11_cursor.fetchall()
+
+        m12_cursor = db.cursor()
+        try:
+            m12_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[2]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+        m12data = m12_cursor.fetchall()
+        ref1 = {
+            "pk": row[0],
+            "m1pk": m11data[0][0],
+            "m1name": str(m11data[0][1]),
+            "m2pk": m12data[0][0],
+            "m2name": str(m12data[0][1]),
+            "description": row[3]
+        }
+        references.append(ref1)
+
+    ref2_cursor = db.cursor()
+    try:
+        ref2_cursor.execute("SELECT * FROM Refers WHERE ReferenceeID = "+pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    data = ref2_cursor.fetchall()
+    print(data)
+    referenced = []
+    for row in data:
+        m21_cursor = db.cursor()
+        try:
+            m21_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+        m21data = m21_cursor.fetchall()
+
+        m22_cursor = db.cursor()
+        try:
+            m22_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[2]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+        m22data = m22_cursor.fetchall()
+        ref2 = {
+            "pk": row[0],
+            "m1pk": m21data[0][0],
+            "m1name": str(m21data[0][1]),
+            "m2pk": m22data[0][0],
+            "m2name": str(m22data[0][1]),
+            "description": row[3]
+        }
+        referenced.append(ref2)
+
     # Get all the actors references
     reviews_cursos = db.cursor()
 
@@ -720,7 +797,7 @@ def info_media(request, pk):
             reviews.append(review)
     # disconnect from server
     db.close()
-    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews": crews, "memes": memes, "reviews": reviews, "login": user})
+    return render(request, 'info-media.block.html', {"media": media, "actors": actors, "crews": crews, "memes": memes, "references": references, "referenced": referenced, "reviews": reviews, "login": user})
 
 
 def edit_media(request, pk):
@@ -1590,3 +1667,227 @@ def info_crew(request, pk):
 
 def error(request):
     return render(request, 'error.block.html')
+
+
+def refs(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+    # Open database connection
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    ref_cursor = db.cursor()
+    try:
+        ref_cursor.execute("SELECT * FROM Refers")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    data = ref_cursor.fetchall()
+    print(data)
+    refs = []
+    for row in data:
+        m1_cursor = db.cursor()
+        try:
+            m1_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+        m1data = m1_cursor.fetchall()
+
+        m2_cursor = db.cursor()
+        try:
+            m2_cursor.execute(
+                "SELECT * FROM Media WHERE MediaID = " + str(row[2]))
+        except pymysql.err.OperationalError as e:
+            print("caught an error")
+            return HttpResponseRedirect(reverse('error'))
+        m2data = m2_cursor.fetchall()
+        ref = {
+            "pk": row[0],
+            "m1pk": m1data[0][0],
+            "m1name": str(m1data[0][1]),
+            "m2pk": m2data[0][0],
+            "m2name": str(m2data[0][1]),
+            "description": row[3]
+        }
+        refs.append(ref)
+    db.close()
+    return render(request, "refs.block.html", {"references": refs, "login": user})
+
+
+def create_reference(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    # Open database connection
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the meme
+    try:
+        cursor.execute("SELECT * FROM Media")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    media = []
+    for row in data:
+        data = {
+            "pk": str(row[0]),
+            "media_name": str(row[1]) + "(" + str(row[2]) + ")"
+        }
+        media.append(data)
+
+    return render(request, 'create-reference.block.html', {"login": user, "media": media})
+
+
+def submit_create_reference(request):
+    if request.method == 'POST':
+
+        form = Reference(request.POST)
+
+        if form.is_valid():
+
+            referencer = form.cleaned_data['referencer']
+            referencee = form.cleaned_data['referencee']
+            location = form.cleaned_data['location']
+            description = form.cleaned_data['description']
+
+            # Update the DB
+            global db_user
+
+            db = pymysql.connect("mysql.cs.virginia.edu",
+                                 db_user, "ib5pW8ZR", "ceb4aq")
+
+            # Prepare to interact with the DB
+            cursor = db.cursor()
+
+            # Insert
+            try:
+                cursor.execute("INSERT INTO Refers (ReferencerID,ReferenceeID,Location,Description) VALUES ('" +
+                               referencer + "','" + referencee + "','" + location + "','" + description + "')")
+            except pymysql.err.OperationalError as e:
+                print("caught an error")
+                return HttpResponseRedirect(reverse('error'))
+            # Save the changes
+            db.commit()
+
+            # disconnect from server
+            db.close()
+
+            return HttpResponseRedirect(reverse('references'))
+
+
+def edit_reference(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    if pk is None:
+        return
+
+    # ensure the pk is safe
+    pk = escape(pk)
+
+    # Open database connection
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the meme
+    try:
+        cursor.execute("SELECT * FROM Media")
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    media = []
+    for row in data:
+        data = {
+            "pk": str(row[0]),
+            "media_name": str(row[1]) + "(" + str(row[2]) + ")"
+        }
+        media.append(data)
+
+    # Prepare to interact with the DB
+    ref_cursor = db.cursor()
+
+    # Get all the meme
+    try:
+        ref_cursor.execute("SELECT * FROM Refers WHERE ReferenceID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    data = ref_cursor.fetchall()
+
+
+    row = data[0]
+    reference = {
+        "pk": str(row[0]),
+        "referencerID": str(row[1]),
+        "referenceeID": str(row[2]),
+        "location": str(row[3]),
+        "description": str(row[4])
+    }
+
+    return render(request, 'edit-reference.block.html', {"login": user, "media": media, "reference": reference})
+
+def delete_reference(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Refers WHERE ReferenceID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('references'))

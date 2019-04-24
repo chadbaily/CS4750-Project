@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block title %}Reference{% endblock %} {% block content%}
+
+<h1>References:</h1>
+
+<p>
+  Here you can find some of our references!
+</p>
+
+<div class="row">
+  <div class="row">
+    <div class="card col-md-4 card-space">
+      <a href="/references/create/">
+        <div class="card-block text-center">
+          <h2><i class="fa fa-plus fa-3x"></i></h2>
+          <h4 class="card-title">Add Reference</h4>
+        </div>
+      </a>
+    </div>
+    {% for reference in references %}
+    <div class="card col-md-4 card-space">
+      <div class="card-body">
+        <a href="/media/info/{{reference.m1pk}}"><h5 class="card-title">{{ reference.m1name }}</h5></a>
+        <h6 class="card-subtitle text-muted"> References <h6>
+        <a href="/media/info/{{reference.m2pk}}"><p class="card-text">{{ reference.m2name}}<p></a>
+        <p class="card-text"> Description: {{reference.description}}<p>
+        <a href="/references/edit/{{ reference.pk }}/" class="card-link">Edit</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% endblock %}
+</div>

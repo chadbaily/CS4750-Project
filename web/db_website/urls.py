@@ -47,7 +47,8 @@ urlpatterns = [
     url(r'^meme/edit/(?P<pk>[0-9]+)/submit/',
         views.update_meme, name='update_meme'),
     url(r'^meme/edit/(?P<pk>[0-9]+)/$', views.edit_meme, name='edit_meme'),
-    url(r'^meme/delete/(?P<pk>[0-9]+)/$', views.delete_meme, name='delete_meme'),
+    url(r'^meme/delete/(?P<pk>[0-9]+)/$',
+        views.delete_meme, name='delete_meme'),
     url(r'^meme/create/submit/$', views.submit_create_meme,
         name='submit_create_meme'),
     url(r'^meme/create/$', views.create_meme, name='create_meme'),
@@ -72,4 +73,10 @@ urlpatterns = [
     url(r'^review/create/$', views.create_review, name='create_review'),
     url(r'^review/$', views.review, name='review'),
 
+    # Refs
+    url(r'^references/edit/(?P<pk>[0-9]+)/$', views.edit_reference, name='edit_reference'),
+    url(r'^references/delete/(?P<pk>[0-9]+)/$', views.delete_reference, name='delete_reference'),
+    url(r'^references/create/submit/$', views.submit_create_reference, name='submit_create_reference'),
+    url(r'^references/create/$', views.create_reference, name='create_reference'),
+    url(r'^references/$', views.refs, name='references'),
 ]
