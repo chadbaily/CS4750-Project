@@ -49,3 +49,11 @@ class Review(forms.Form):
     rating = forms.CharField(label='review_name', max_length=100)
     description = forms.CharField(
         label='description', max_length=1000, widget=forms.Textarea)
+
+
+class Reference(forms.Form):
+    referencer = forms.CharField(label='referencer', max_length=100)
+    referencee = forms.CharField(label='referencee', max_length=100)
+    location = forms.CharField(label='location', max_length=100)
+    description = forms.CharField(
+        label='description', max_length=1000, widget=forms.Textarea)
