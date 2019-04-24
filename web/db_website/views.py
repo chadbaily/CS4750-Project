@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.html import escape
+from django.contrib import messages
 from .forms import *
 import json
 import requests
@@ -47,6 +48,7 @@ def actors(request):
         cursor.execute("SELECT * FROM Actor")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -90,6 +92,7 @@ def edit_actors(request, pk):
         cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -136,6 +139,7 @@ def delete_actor(request, pk):
         cursor.execute("DELETE FROM Actor WHERE ActorID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
         # Save the changes
     db.commit()
@@ -189,6 +193,7 @@ def update_actor(request, pk):
                                last_name + "', Gender = '" + gender + "', DOB = '" + dob + "', BirthCountry = '" + birth_country + "', BirthCity = '" + birth_city + "' WHERE ActorID = " + pk)
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -248,6 +253,7 @@ def submit_create_actor(request):
                                first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + gender + "','" + birth_country + "','" + birth_city + ")")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -286,6 +292,7 @@ def crews(request):
         cursor.execute("SELECT * FROM Crew")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -328,6 +335,7 @@ def edit_crews(request, pk):
         cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -372,6 +380,7 @@ def delete_crew(request, pk):
         cursor.execute("DELETE FROM Crew WHERE CrewID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
         # Save the changes
     db.commit()
@@ -418,6 +427,7 @@ def update_crew(request, pk):
                                last_name + "', Type = '" + ctype + "', DOB = '" + dob + "' WHERE CrewID = " + pk)
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
 
             # Save the changes
@@ -476,6 +486,7 @@ def submit_create_crew(request):
                                first_name + "','" + middle_name + "','" + last_name + "','" + dob + "','" + ctype + "')")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -515,6 +526,7 @@ def media(request):
 
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -565,6 +577,7 @@ def info_media(request, pk):
         cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -592,6 +605,7 @@ def info_media(request, pk):
         actors_cursor.execute("SELECT * FROM Actors WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -606,6 +620,7 @@ def info_media(request, pk):
                 "SELECT * FROM Actor WHERE ActorID = " + str(row[1]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         actor_data = actor_cursor.fetchall()
@@ -624,6 +639,7 @@ def info_media(request, pk):
         crews_cursor.execute("SELECT * FROM Crews WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -639,6 +655,7 @@ def info_media(request, pk):
                 "SELECT * FROM Crew WHERE CrewID = " + str(row[0]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
 
         # Fetch all rows
@@ -659,6 +676,7 @@ def info_media(request, pk):
             "SELECT * FROM InReferenceTo WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -674,6 +692,7 @@ def info_media(request, pk):
                 "SELECT * FROM Memes WHERE MemeID = " + str(row[0]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         meme_data = meme_cursor.fetchall()
@@ -692,6 +711,7 @@ def info_media(request, pk):
         ref1_cursor.execute("SELECT * FROM Refers WHERE ReferencerID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     data = ref1_cursor.fetchall()
@@ -704,6 +724,7 @@ def info_media(request, pk):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
 
         m11data = m11_cursor.fetchall()
@@ -714,6 +735,7 @@ def info_media(request, pk):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[2]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         m12data = m12_cursor.fetchall()
         ref1 = {
@@ -731,6 +753,7 @@ def info_media(request, pk):
         ref2_cursor.execute("SELECT * FROM Refers WHERE ReferenceeID = "+pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     data = ref2_cursor.fetchall()
@@ -743,6 +766,7 @@ def info_media(request, pk):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         m21data = m21_cursor.fetchall()
 
@@ -752,6 +776,7 @@ def info_media(request, pk):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[2]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         m22data = m22_cursor.fetchall()
         ref2 = {
@@ -771,6 +796,7 @@ def info_media(request, pk):
         reviews_cursos.execute("SELECT * FROM Review_On WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -786,6 +812,7 @@ def info_media(request, pk):
                 "SELECT * FROM Review WHERE ReviewID = " + str(row[0]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         review_data = review_cursor.fetchall()
@@ -825,6 +852,7 @@ def edit_media(request, pk):
         cursor.execute("SELECT * FROM Media WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -871,6 +899,7 @@ def delete_media(request, pk):
         cursor.execute("DELETE FROM Media WHERE MediaID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
         # Save the changes
     db.commit()
@@ -920,6 +949,7 @@ def update_media(request, pk):
                                mpaa_rating+"',Crit_Rating = '"+crit_rating+"'WHERE MediaID = " + pk)
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
 
             # Save the changes
@@ -979,6 +1009,7 @@ def submit_create_media(request):
                                media_name + "','" + year + "','" + mtype + "','" + genre + "','" + description + "','" + mpaa_rating + "','" + crit_rating + "')")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -1016,6 +1047,7 @@ def meme(request):
         cursor.execute("SELECT * FROM Memes")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1060,6 +1092,7 @@ def edit_meme(request, pk):
         cursor.execute("SELECT * FROM Memes WHERE  MemeID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1102,6 +1135,7 @@ def delete_meme(request, pk):
         cursor.execute("DELETE FROM Memes WHERE MemeID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
         # Save the changes
     db.commit()
@@ -1198,6 +1232,7 @@ def submit_create_meme(request):
                                genre + "','" + description + "','" + meme_format + "')")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -1239,6 +1274,7 @@ def submit_login(request):
                                user_name+"' and password = '"+password+"'")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
 
             # Fetch all rows
@@ -1263,6 +1299,7 @@ def submit_login(request):
                 # return response
                 return response
             else:
+                messages.warning(request, "Wrong username or password")
                 return HttpResponseRedirect(reverse('login'))
 
 
@@ -1290,6 +1327,7 @@ def review(request):
         cursor.execute("SELECT * FROM Review")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1303,6 +1341,7 @@ def review(request):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         mediaData = mediaCursor.fetchall()
         # print(mediaData)
@@ -1346,6 +1385,7 @@ def submit_review(request):
                                media_id + "','" + rating + "','" + description + "')")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -1387,6 +1427,7 @@ def update_review(request, pk):
                                "', Description = '" + description + "' WHERE ReviewID = " + pk)
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
 
             # Save the changes
@@ -1428,6 +1469,7 @@ def edit_review(request, pk):
         cursor.execute("SELECT * FROM Review WHERE ReviewID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1470,6 +1512,7 @@ def delete_review(request, pk):
         cursor.execute("DELETE FROM Review WHERE ReviewID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
         # Save the changes
     db.commit()
@@ -1515,6 +1558,7 @@ def info_actor(request, pk):
         cursor.execute("SELECT * FROM Actor WHERE ActorID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1541,6 +1585,7 @@ def info_actor(request, pk):
         actors_cursor.execute("SELECT * FROM Actors WHERE ActorID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1555,6 +1600,7 @@ def info_actor(request, pk):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         media_data = media_cursor.fetchall()
@@ -1607,6 +1653,7 @@ def info_crew(request, pk):
         cursor.execute("SELECT * FROM Crew WHERE CrewID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1633,6 +1680,7 @@ def info_crew(request, pk):
         actors_cursor.execute("SELECT * FROM Crews WHERE CrewID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1647,6 +1695,7 @@ def info_crew(request, pk):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[0]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         # Fetch all rows
         media_data = media_cursor.fetchall()
@@ -1688,6 +1737,7 @@ def refs(request):
         ref_cursor.execute("SELECT * FROM Refers")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     data = ref_cursor.fetchall()
@@ -1700,6 +1750,7 @@ def refs(request):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[1]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         m1data = m1_cursor.fetchall()
 
@@ -1709,6 +1760,7 @@ def refs(request):
                 "SELECT * FROM Media WHERE MediaID = " + str(row[2]))
         except pymysql.err.OperationalError as e:
             print("caught an error")
+            messages.error(request, "Permisson denied")
             return HttpResponseRedirect(reverse('error'))
         m2data = m2_cursor.fetchall()
         ref = {
@@ -1745,6 +1797,7 @@ def create_reference(request):
         cursor.execute("SELECT * FROM Media")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1788,6 +1841,7 @@ def submit_create_reference(request):
                                referencer + "','" + referencee + "','" + location + "','" + description + "')")
             except pymysql.err.OperationalError as e:
                 print("caught an error")
+                messages.error(request, "Permisson denied")
                 return HttpResponseRedirect(reverse('error'))
             # Save the changes
             db.commit()
@@ -1825,6 +1879,7 @@ def edit_reference(request, pk):
         cursor.execute("SELECT * FROM Media")
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     # Fetch all rows
@@ -1846,6 +1901,7 @@ def edit_reference(request, pk):
         ref_cursor.execute("SELECT * FROM Refers WHERE ReferenceID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
 
     data = ref_cursor.fetchall()
@@ -1885,6 +1941,7 @@ def delete_reference(request, pk):
         cursor.execute("DELETE FROM Refers WHERE ReferenceID = " + pk)
     except pymysql.err.OperationalError as e:
         print("caught an error")
+        messages.error(request, "Permisson denied")
         return HttpResponseRedirect(reverse('error'))
         # Save the changes
     db.commit()

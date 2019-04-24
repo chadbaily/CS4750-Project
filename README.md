@@ -6,9 +6,4 @@
 - Clone repo
 - `cd` into the repo
 - run `docker-compose up`
-- navigate to [phpMyAdmin](http://localhost:8082)
-- Use the following credientals
-  ```
-    server: db
-    username: root
-    ```
+- navigate to [localhost:8000](http://localhost:8000)
