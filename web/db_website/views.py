@@ -1952,11 +1952,11 @@ def submit_create_reference(request):
             except pymysql.err.InternalError as e:
                 print("caught an error")
                 messages.warning(request, "Error")
-                return HttpResponseRedirect(reverse('edit_reference', args=[pk]))
+                return HttpResponseRedirect(reverse('create_reference'))
             except pymysql.err.ProgrammingError as e:
                 print("problem")
                 messages.info(request, "Bad form data")
-                return HttpResponseRedirect(reverse('edit_reference', args=[pk]))
+                return HttpResponseRedirect(reverse('create_reference'))
 
             
             # Save the changes
