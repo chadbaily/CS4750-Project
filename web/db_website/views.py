@@ -264,6 +264,7 @@ def submit_create_actor(request):
             return HttpResponseRedirect(reverse('actors'))
         else:
             # print("form is false")
+            messages.info(request, "Bad form data")
             return HttpResponseRedirect(reverse('create_actor'))
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -497,6 +498,7 @@ def submit_create_crew(request):
             return HttpResponseRedirect(reverse('crews'))
         else:
             # print("form is false")
+            messages.info(request, "Bad form data")
             return HttpResponseRedirect(reverse('create_crew'))
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1020,6 +1022,7 @@ def submit_create_media(request):
             return HttpResponseRedirect(reverse('media'))
         else:
             # print("form is false")
+            messages.info(request, "Bad form data")
             return HttpResponseRedirect(reverse('create_media'))
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1243,6 +1246,7 @@ def submit_create_meme(request):
             return HttpResponseRedirect(reverse('meme'))
         else:
             # print("form is false")
+            messages.info(request, "Bad form data")
             return HttpResponseRedirect(reverse('create_meme'))
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1850,6 +1854,10 @@ def submit_create_reference(request):
             db.close()
 
             return HttpResponseRedirect(reverse('references'))
+        else:
+            # print("form is false")
+            messages.info(request, "Bad form data")
+            return HttpResponseRedirect(reverse('create_reference'))
 
 
 def edit_reference(request, pk):
