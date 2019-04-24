@@ -968,7 +968,69 @@ def edit_meme(request, pk):
     if pk is None:
         return
 
-    return render(request, 'edit-meme.block.html', {"login": user})
+    pk = escape(pk)
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Get all the actors
+    try:
+        cursor.execute("SELECT * FROM Memes WHERE  MemeID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+
+    # Fetch all rows
+    data = cursor.fetchall()
+    print(data)
+    row = data[0]
+    meme = {
+        "pk": row[0],
+        "genre": str(row[1]),
+        "format": str(row[2]),
+        "description": str(row[3])
+    }
+
+    # disconnect from server
+    db.close()
+
+    return render(request, 'edit-meme.block.html', {"login": user, "meme": meme})
+
+
+def delete_meme(request, pk):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    pk = escape(pk)
+
+    # Update the DB
+    global db_user
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    # Prepare to interact with the DB
+    cursor = db.cursor()
+
+    # Update
+    try:
+        cursor.execute("DELETE FROM Memes WHERE MemeID = " + pk)
+    except pymysql.err.OperationalError as e:
+        print("caught an error")
+        return HttpResponseRedirect(reverse('error'))
+        # Save the changes
+    db.commit()
+
+    # disconnect from server
+    db.close()
+
+    return HttpResponseRedirect(reverse('meme'))
 
 
 def update_meme(request, pk):

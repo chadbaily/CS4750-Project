@@ -14,6 +14,7 @@
         aria-describedby="genreHelp"
         placeholder="Reference"
         name="genre"
+        value="{{ meme.genre }}"
       />
     </div>
     <div class="form-group">
@@ -25,20 +26,26 @@
         aria-describedby="meme_formatHelp"
         placeholder="Top/Bottom Text"
         name="meme_format"
+        value="{{ meme.format }}"
       />
     </div>
     <div class="form-group">
       <label for="description">Description</label>
-      <input
+      <textarea
         type="text"
         class="form-control"
         id="description"
         aria-describedby="descriptionHelp"
         placeholder="This meme..."
         name="description"
-      />
+      >
+      {{ meme.description }}
+      </textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/meme/delete/{{ meme.pk }}/" class="btn btn-danger right-button"
+      >Delete</a
+    >
   </form>
 </div>
 

@@ -33,15 +33,17 @@ class Media(forms.Form):
 
 class Meme(forms.Form):
     genre = forms.CharField(label='genre', max_length=100)
-    description = forms.CharField(label='description', max_length=100)
+    description = forms.CharField(
+        label='description', max_length=500, widget=forms.Textarea)
     meme_format = forms.CharField(label='format', max_length=100)
 
-class Login(forms.Form):
-    user_name = forms.CharField(label='User name', max_length = 100)
-    password = forms.CharField(label='Password', max_length = 100)
-    
-class Review(forms.Form):
-    media_id = forms.CharField(label = 'meda_id', max_length = 100)
-    rating = forms.CharField(label = 'review_name', max_length = 100)
-    description = forms.CharField(label = 'description', max_length = 1000)
 
+class Login(forms.Form):
+    user_name = forms.CharField(label='User name', max_length=100)
+    password = forms.CharField(label='Password', max_length=100)
+
+
+class Review(forms.Form):
+    media_id = forms.CharField(label='meda_id', max_length=100)
+    rating = forms.CharField(label='review_name', max_length=100)
+    description = forms.CharField(label='description', max_length=1000)

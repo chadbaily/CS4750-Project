@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^meme/edit/(?P<pk>[0-9]+)/submit/',
         views.update_meme, name='update_meme'),
     url(r'^meme/edit/(?P<pk>[0-9]+)/$', views.edit_meme, name='edit_meme'),
+    url(r'^meme/delete/(?P<pk>[0-9]+)/$', views.delete_meme, name='delete_meme'),
     url(r'^meme/create/submit/$', views.submit_create_meme,
         name='submit_create_meme'),
     url(r'^meme/create/$', views.create_meme, name='create_meme'),
