@@ -7,6 +7,7 @@ from django.utils.html import escape
 from django.contrib import messages
 from .forms import *
 import json
+import csv
 import requests
 import pymysql
 
@@ -1985,3 +1986,147 @@ def delete_reference(request, pk):
     db.close()
 
     return HttpResponseRedirect(reverse('references'))
+
+def export_media(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    media_cursor = db.cursor()
+    media_cursor.execute("SELECT * FROM Media")
+    media_data = media_cursor.fetchall()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="media.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['MediaID','MediaName','Year','Type','Genre','Description','MPAA Rating','Critic Rating'])
+    for row in media_data:
+        writer.writerow(row)
+
+    return response
+
+def export_actors(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    media_cursor = db.cursor()
+    media_cursor.execute("SELECT * FROM Actor")
+    media_data = media_cursor.fetchall()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="actors.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ActorID','FirstN','MiddleN','LastN','Date Of Birth','Gender','Birth Country','Birth City'])
+    for row in media_data:
+        writer.writerow(row)
+
+    return response
+
+def export_crews(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    media_cursor = db.cursor()
+    media_cursor.execute("SELECT * FROM Crew")
+    media_data = media_cursor.fetchall()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="crews.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['CrewID','FirstN','MiddleN','LastN','Date of Birth','Crew Type'])
+    for row in media_data:
+        writer.writerow(row)
+
+    return response
+
+def export_meme(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    media_cursor = db.cursor()
+    media_cursor.execute("SELECT * FROM Memes")
+    media_data = media_cursor.fetchall()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="memes.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['MemeID','Genre','Format','Description'])
+    for row in media_data:
+        writer.writerow(row)
+
+    return response
+
+def export_review(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    media_cursor = db.cursor()
+    media_cursor.execute("SELECT * FROM Review")
+    media_data = media_cursor.fetchall()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reviews.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ReviewID','MediaID','Rating','Description'])
+    for row in media_data:
+        writer.writerow(row)
+
+    return response
+
+def export_refs(request):
+    user = request.COOKIES.get('user')
+    if(not user):
+        response = HttpResponseRedirect(reverse('login'))
+        response.delete_cookie("user")
+        return response
+
+    db = pymysql.connect("mysql.cs.virginia.edu",
+                         db_user, "ib5pW8ZR", "ceb4aq")
+
+    media_cursor = db.cursor()
+    media_cursor.execute("SELECT * FROM Refers")
+    media_data = media_cursor.fetchall()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="references.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ReferenceID','ReferencerID','ReferenceeID','Description'])
+    for row in media_data:
+        writer.writerow(row)
+
+    return response
