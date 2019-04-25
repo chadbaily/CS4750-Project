@@ -1,3 +1,5 @@
 requests
 mod_wsgi
 PyMySQL
+gunicorn
+django-heroku

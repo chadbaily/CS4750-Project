@@ -3,11 +3,11 @@ version: '3.1'
 
 services:
   web:
-    image: tp33/django
+    build: .
     ports:
       - 80:8000
     volumes:
-      - ./web/:/app
+      - ./:/app
     command: bash -c " pip install --upgrade -r requirements.txt
       && python manage.py makemigrations
       && python manage.py migrate
